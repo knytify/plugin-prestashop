@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>knytify</name>
+	<displayName><![CDATA[Knytify - Fraud Detection and Prevention]]></displayName>
+	<version><![CDATA[0.0.1]]></version>
+	<description><![CDATA[This is the description]]></description>
+	<author><![CDATA[Knytify]]></author>
+	<tab><![CDATA[analytics_stats]]></tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+</module>
