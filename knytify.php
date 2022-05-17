@@ -28,8 +28,6 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-const knytifyAdress= "http://host.docker.internal:8082";
-
 class Knytify extends Module
 {
     protected $config_form = false;
@@ -103,12 +101,16 @@ class Knytify extends Module
 
         if ($this->credentialsReturn == "ok") {
             $this->urlToParse = parse_url(Context::getContext()->shop->getBaseURL(true));
-            $this->urlToAdd = $this->urlToParse['host'].'.com'; // supprimer le point com quand on est pas en dev pour qu'il prenne bien le domain racine
+            $this->urlToAdd = 'www.ajouttesturl.com';//$this->urlToParse['host'].'.com'; // supprimer le point com quand on est pas en dev pour qu'il prenne bien le domain racine
             $this->domainReturn = $this->domainToSet($this->urlToAdd);
             if($this->domainReturn == "ok")
             {
+                echo "toto";
+                die();
             }
             else{
+                echo "titi";
+                die();
             }
         }
 
@@ -295,7 +297,7 @@ class Knytify extends Module
             'username'=>Tools::getValue('KNYTIFY_ACCOUNT_EMAIL'),
             'email'=>Tools::getValue('KNYTIFY_ACCOUNT_EMAIL'),
             'password'=>Tools::getValue('KNYTIFY_ACCOUNT_PASSWORD'),
-            'keepMeLogged'=>true);
+            'keepMeLogged'=>false);
         $payload = json_encode($params);
 
         $this->credentialsReturn = $this->getCredentials($payload);
@@ -328,43 +330,7 @@ class Knytify extends Module
             $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
             if ($http_code == intval(200)) {
-                return "ok";
-            } else {
-                return "nok";
-            }
-        } catch (\Throwable $th) {
-            throw $th;
-        } finally {
-            curl_close($ch);
-        }
-    }
-
-    private function refreshToken()
-    {
-        $ch = curl_init("https://back.knytify.com/auth/refresh");
-        try {
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
-            curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
-            curl_setopt(
-                $ch,
-                CURLOPT_HTTPHEADER,
-                array(
-                'Content-Type: application/json')
-            );
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            
-            $response = curl_exec($ch);
-            
-            if (curl_errno($ch)) {
-                echo curl_error($ch);
-            }
-            
-            $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $responseArray = json_decode($response);
-
-            if ($http_code == intval(200)) {
+                $this->credentialsResponse = json_decode($response, false);
                 return "ok";
             } else {
                 return "nok";
@@ -378,6 +344,7 @@ class Knytify extends Module
 
     private function addDomain($domainToAdd)
     {
+        $authorizationPayload = "Authorization: Bearer " . $this->credentialsResponse->access_token;
         $paramsDomain=array(
             'domain' => $domainToAdd
             );
@@ -389,14 +356,13 @@ class Knytify extends Module
             curl_setopt($ch, CURLOPT_POSTFIELDS, $payloadDomain);
             curl_setopt($ch, CURLINFO_HEADER_OUT, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
-            curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
             curl_setopt(
                 $ch,
                 CURLOPT_HTTPHEADER,
                 array(
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($payloadDomain))
+                'Content-Length: ' . strlen($payloadDomain),
+                $authorizationPayload)
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             
@@ -421,17 +387,17 @@ class Knytify extends Module
 
     private function domainToSet($domainToSetValue)
     {
+        $authorizationPayload = "Authorization: Bearer " . $this->credentialsResponse->access_token;
         $ch = curl_init("https://back.knytify.com/me/domain");
         try {
             curl_setopt($ch, CURLINFO_HEADER_OUT, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/cookies.txt');
-            curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/cookies.txt');
             curl_setopt(
                 $ch,
                 CURLOPT_HTTPHEADER,
                 array(
-                'Content-Type: application/json'
+                'Content-Type: application/json',
+                $authorizationPayload
             )
             );
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
