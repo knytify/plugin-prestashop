@@ -102,7 +102,7 @@ class Knytify extends Module
         if ($this->credentialsReturn == "ok") {
             $this->urlToParse = parse_url(Context::getContext()->shop->getBaseURL(true));
             $this->urlToAdd = 'www.ajouttesturl.com';//$this->urlToParse['host'].'.com'; // supprimer le point com quand on est pas en dev pour qu'il prenne bien le domain racine
-            $this->domainReturn = $this->domainToSet($this->urlToAdd, $this->credentialsResponse);
+            $this->domainReturn = $this->domainToSet($this->urlToAdd);
             if($this->domainReturn == "ok")
             {
                 echo "toto";
@@ -385,7 +385,7 @@ class Knytify extends Module
         }
     }
 
-    private function domainToSet($domainToSetValue, $authorization)
+    private function domainToSet($domainToSetValue)
     {
         $authorizationPayload = "Authorization: Bearer " . $this->credentialsResponse->access_token;
         $ch = curl_init("https://back.knytify.com/me/domain");
