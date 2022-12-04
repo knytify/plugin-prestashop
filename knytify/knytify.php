@@ -33,7 +33,7 @@ class Knytify extends Module
     {
         Configuration::updateValue('KNYTIFY_ENABLED', false);
         return parent::install() &&
-            $this->registerHook('header');
+            $this->registerHook('header') && $this->registerHook('displayBackOfficeHeader');
     }
 
     public function uninstall()
@@ -54,16 +54,15 @@ class Knytify extends Module
         }
     }
 
-
     public function hookDisplayBackOfficeHeader()
     {
         $this->context->controller->addJS($this->_path . 'views/js/back.js');
         $this->context->controller->addCSS($this->_path . 'views/css/back.css');
     }
 
-// public function hookHeader()
-// {
-//     $this->context->controller->addJS($this->_path . '/views/js/front.js');
-//     $this->context->controller->addCSS($this->_path . '/views/css/front.css');
-// }
+    public function hookHeader()
+    {
+        $this->context->controller->addJS($this->_path . '/views/js/front.js');
+        // $this->context->controller->addCSS($this->_path . '/views/css/front.css');
+    }
 }

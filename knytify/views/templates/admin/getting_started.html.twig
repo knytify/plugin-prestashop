@@ -5,10 +5,13 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card">
+    <div class="card getting-started" id="knytify">
         <div class="card-body card-block">
+			<p class="question">
+				Do you already have an account?
+			</p>
 
-			<div id="knytify" class="panel container">
+			<div class="panel container">
 				<div class="row options">
 					<div class="col-sm-6 option">
 						<a href="{{registration_link}}">New Account</a>
@@ -17,10 +20,6 @@
 						<a href="{{login_link}}">Log In</a>
 					</div>
 				</div>
-
-				<a href="{{test_1}}">Test1</a>
-				<a href="{{test_2}}">Test2</a>
-				<a href="{{test_3}}">Test3</a>
 			</div>
         </div>
     </div>

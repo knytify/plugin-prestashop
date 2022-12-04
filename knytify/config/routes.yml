@@ -13,3 +13,11 @@ ps_controller_registration:
         _controller: 'Knytify\Controller\Admin\RegistrationController::indexAction'
         _legacy_controller: 'KnytifyRegistration'
         _legacy_link: KnytifyRegistration
+
+ps_controller_login:
+    path: knytify/login
+    methods: [GET]  
+    defaults:
+        _controller: 'Knytify\Controller\Admin\LoginController::indexAction'
+        _legacy_controller: 'KnytifyLogin'
+        _legacy_link: KnytifyLogin

@@ -26,16 +26,34 @@
 * to avoid any conflicts with others containers.
 */
 
-#knytify #get-started #options {
-    width: 50%;
+#knytify.getting-started .question {
+    text-align: center;
+    font-size: 20px;
+    padding: 20px;
+}
+
+#knytify.getting-started .options {
     text-align: center;
 }
 
-#knytify #get-started #options .option {
-    padding: 25px 0;
+#knytify.getting-started .options>.option {
     border-radius: 5px;
+    background: #fff;
 }
 
-#knytify #get-started #options .option:hover {
-    background: #eff1f2;
+#knytify.getting-started .options .option {
+    border: 2px solid transparent;
+    /*Prevents changing size on hover*/
+}
+
+#knytify.getting-started .options>.option>a {
+    display: block;
+    line-height: 120px;
+    font-size: 20px;
+}
+
+#knytify.getting-started .options .option:hover {
+    text-decoration: none;
+    border: 2px solid #53EB3F;
+    background: #eafbe7;
 }
