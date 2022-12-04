@@ -1,1 +1,0 @@
-# Knytify - Fraud Protection
