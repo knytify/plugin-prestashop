@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>knytify</name>
-	<displayName><![CDATA[Knytify - Fraud Detection and Prevention]]></displayName>
-	<version><![CDATA[0.0.1]]></version>
-	<description><![CDATA[This is the description]]></description>
+	<displayName><![CDATA[Knytify - Fraud Protection]]></displayName>
+	<version><![CDATA[1.0.0]]></version>
+	<description><![CDATA[Advanced traffic quality evaluation, fraud detection & prevention]]></description>
 	<author><![CDATA[Knytify]]></author>
 	<tab><![CDATA[analytics_stats]]></tab>
 	<is_configurable>1</is_configurable>

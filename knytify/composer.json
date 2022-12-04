@@ -1,0 +1,12 @@
+{
+    "name": "prestashop/knytify",
+    "autoload": {
+      "psr-4": {
+        "Knytify\\": "src/"
+      }
+    },
+    "config": {
+        "prepend-autoloader": false
+    },
+    "type": "prestashop-module"
+  }

@@ -1,1 +1,1 @@
-# Knytify - Fraud Detection and Prevention
+# Knytify - Fraud Protection

@@ -1,0 +1,15 @@
+ps_controller_getting_started:
+    path: knytify/getting-started
+    methods: [GET]  
+    defaults:
+        _controller: 'Knytify\Controller\Admin\GettingStartedController::indexAction'
+        _legacy_controller: 'KnytifyGettingStarted'
+        _legacy_link: KnytifyGettingStarted
+
+ps_controller_registration:
+    path: knytify/registration
+    methods: [GET]  
+    defaults:
+        _controller: 'Knytify\Controller\Admin\RegistrationController::indexAction'
+        _legacy_controller: 'KnytifyRegistration'
+        _legacy_link: KnytifyRegistration
