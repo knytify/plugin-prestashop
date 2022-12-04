@@ -7,17 +7,19 @@
 {% block content %}
     <div class="card login" id="knytify">
         <div class="card-body card-block">
-			<div class="panel container">
 
-				<div class="row">
-					<div class="col-sm-12">
-                        {{ form_start(form) }}
-                        {{ form_widget(form) }}
-                        {{ form_end(form) }}
-					</div>
-				</div>
+            <p class="card-title">
+                <img src="/modules/knytify/logo.png"/>
+            </p>
 
-			</div>
+			<p class="card-title">
+				Do you already have an account?
+			</p>
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
         </div>
     </div>
 {% endblock %}

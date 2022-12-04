@@ -26,7 +26,11 @@
 * to avoid any conflicts with others containers.
 */
 
-#knytify.getting-started .question {
+#knytify form {
+    text-align: right;
+}
+
+#knytify .card-title {
     text-align: center;
     font-size: 20px;
     padding: 20px;
