@@ -1,6 +1,14 @@
-# services:
+services:
+
 #   # The name of the service must match the full namespace class
 #   Knytify\Controller\GettingStartedController:
 #     class: Knytify\Controller\GettingStartedController
 #     arguments:
 #       - '@doctrine.cache.provider'
+
+
+services:
+    Knytify\Service\Admin\KnytifyClient:
+      class: Knytify\Service\Admin\KnytifyClient
+        # arguments: ['@doctrine.orm.entity_manager']
+        # tags: [form.type]

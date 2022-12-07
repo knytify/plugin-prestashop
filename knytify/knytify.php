@@ -19,14 +19,14 @@ class Knytify extends Module
         $this->version = '1.0.0';
         $this->author = 'Knytify';
         $this->need_instance = 1;
-        $this->bootstrap = true; // compliant
+        $this->bootstrap = true;
 
         parent::__construct();
 
         $this->displayName = $this->l('Knytify - Fraud Protection');
         $this->description = $this->l('Advanced traffic quality evaluation, fraud detection & prevention');
         $this->confirmUninstall = $this->l('Uninstalling this plugin will stop prevention against low quality traffic. Do you wish to proceed uninstalling it?');
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7.5', 'max' => '1.9.9');
     }
 
     public function install()
@@ -63,6 +63,5 @@ class Knytify extends Module
     public function hookHeader()
     {
         $this->context->controller->addJS($this->_path . '/views/js/front.js');
-        // $this->context->controller->addCSS($this->_path . '/views/css/front.css');
     }
 }

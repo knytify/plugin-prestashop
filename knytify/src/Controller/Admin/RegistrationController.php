@@ -11,13 +11,20 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-
 use Knytify\Entity\Admin\RegistrationEntity;
+
+use Configuration;
 
 class RegistrationController extends FrameworkBundleAdminController
 {
     public function indexAction(Request $request)
     {
+        $api_key = Configuration::get('KNYTIFY_API_KEY', null);
+
+        if (!empty($api_key)) {
+            return $this->redirectToRoute('ps_controller_configuration');
+        }
+
         $entity = new RegistrationEntity();
 
         $form = $this->createFormBuilder($entity)
@@ -27,11 +34,25 @@ class RegistrationController extends FrameworkBundleAdminController
             ->add('save', SubmitType::class, ['label' => 'Register account'])
             ->getForm();
 
+        $params = [
+            'form' => $form->createView(),
+        ];
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entity = $form->getData();
+            $service = $this->get('Knytify\Service\Admin\KnytifyClient');
+            $success = $service->register($entity);
+            $params['success'] = $success;
+            if (!$success) {
+                $params['error'] = $service->getError();
+            }
+            Configuration::updateValue('KNYTIFY_API_KEY', 'fake-api-key-238a89345a89hav');
+        }
+
         return $this->render(
             '@Modules/knytify/views/templates/admin/registration.html.twig',
-            [
-                'form' => $form->createView()
-            ]
+            $params
         );
     }
 }

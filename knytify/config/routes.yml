@@ -8,7 +8,7 @@ ps_controller_getting_started:
 
 ps_controller_registration:
     path: knytify/registration
-    methods: [GET]  
+    methods: [GET, POST]  
     defaults:
         _controller: 'Knytify\Controller\Admin\RegistrationController::indexAction'
         _legacy_controller: 'KnytifyRegistration'
@@ -21,3 +21,11 @@ ps_controller_login:
         _controller: 'Knytify\Controller\Admin\LoginController::indexAction'
         _legacy_controller: 'KnytifyLogin'
         _legacy_link: KnytifyLogin
+
+ps_controller_configuration:
+    path: knytify/getting-started
+    methods: [GET]  
+    defaults:
+        _controller: 'Knytify\Controller\Admin\GettingStartedController::indexAction'
+        _legacy_controller: 'KnytifyGettingStarted'
+        _legacy_link: KnytifyGettingStarted

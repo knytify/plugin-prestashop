@@ -12,14 +12,31 @@
             <p class="card-title">
                 <img src="/modules/knytify/logo.png"/>
             </p>
+            
+            {% if success  %}
 
-			<p class="card-title">
-				Register now with Knytify, in one step!
-			</p>
+                <p class="card-title">
+                    You are now registered !
+                </p>
 
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+            {% else %}
+
+                <p class="card-title">
+                    Register now with Knytify, in one step!
+                </p>
+
+
+                {% if error %}
+                    <p class="card-title">
+                        You are now registered !
+                    </p>
+                {% endif %}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+
+            {% endif %}
 
 			</div>
         </div>
