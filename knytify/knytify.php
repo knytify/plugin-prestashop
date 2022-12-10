@@ -33,7 +33,9 @@ class Knytify extends Module
     {
         Configuration::updateValue('KNYTIFY_ENABLED', false);
         return parent::install() &&
-            $this->registerHook('header') && $this->registerHook('displayBackOfficeHeader');
+            $this->registerHook('header') &&
+            $this->registerHook('displayBackOfficeHeader') &&
+            $this->registerHook('displayBeforeBodyClosingTag');
     }
 
     public function uninstall()
@@ -46,7 +48,13 @@ class Knytify extends Module
     public function getContent()
     {
 
-        $api_key = Configuration::get('api_key');
+        if (!function_exists('curl_version')) {
+            return $this->render(
+                '@Modules/knytify/views/templates/errors/curl_not_supported.html.twig',
+            );
+        }
+
+        $api_key = Configuration::get('KNYTIFY_API_KEY');
         if (empty($api_key)) {
             Tools::redirectAdmin(
                 $this->context->link->getAdminLink('KnytifyGettingStarted')
@@ -64,4 +72,19 @@ class Knytify extends Module
     {
         $this->context->controller->addJS($this->_path . '/views/js/front.js');
     }
+
+
+    public function hookDisplayBeforeBodyClosingTag()
+    {
+        if (Configuration::get('KNYTIFY_ENABLED')) {
+            return '
+            <script src="https://live.knytify.com/tag/main.js"></script>
+            <script>
+              window.knytify.init();
+            </script>';
+        } else {
+            return '';
+        }
+    }
+
 }

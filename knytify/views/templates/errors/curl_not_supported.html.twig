@@ -1,0 +1,29 @@
+{% extends '@!PrestaShop/Admin/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="card login" id="knytify">
+        <div class="card-body card-block">
+
+            <p class="card-title">
+                <img src="/modules/knytify/logo.png"/>
+            </p>
+
+			<p class="card-title">
+				This plugin requires Curl extension enabled in your Php installation</br>.
+                Please, contact your website or hosting administrator.
+			</p>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+
