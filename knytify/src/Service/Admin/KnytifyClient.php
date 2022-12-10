@@ -103,7 +103,7 @@ class KnytifyClient extends AbstractType
             $success = $this->status_code >= 200 && $this->status_code < 300;
 
             if ($success) {
-                $this->response = empty($payload) ? $curl_response : json_decode($curl_response, true);
+                $this->response = empty($curl_response) ? "" : json_decode($curl_response, true);
             } else {
                 $this->error = curl_error($ch);
             }
