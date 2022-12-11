@@ -9,7 +9,7 @@ class ApiKeyEntity
     /**
      * Get the value of api_key
      */
-    public function getApi_key()
+    public function getApiKey()
     {
         return $this->api_key;
     }
@@ -19,7 +19,7 @@ class ApiKeyEntity
      *
      * @return  self
      */
-    public function setApi_key($api_key)
+    public function setApiKey($api_key)
     {
         $this->api_key = $api_key;
 

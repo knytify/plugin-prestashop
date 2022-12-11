@@ -1,24 +1,21 @@
 <?php
 
-
-
 namespace Knytify\Controller\Admin;
-
 
 use Symfony\Component\HttpFoundation\Request;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
-// use Knytify\Service\Admin\LoginForm;
-
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Knytify\Entity\Admin\LoginEntity;
 
 class LoginController extends FrameworkBundleAdminController
 {
     public function indexAction(Request $request)
     {
+        $router = SymfonyContainer::getInstance()->get('router');
+
         $login = new LoginEntity();
 
         $form = $this->createFormBuilder($login)
@@ -30,7 +27,8 @@ class LoginController extends FrameworkBundleAdminController
         return $this->render(
             '@Modules/knytify/views/templates/admin/login.html.twig',
             [
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'getting_started_link' => $router->generate('ps_controller_getting_started')
             ]
         );
     }

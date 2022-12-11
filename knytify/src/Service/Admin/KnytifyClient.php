@@ -12,7 +12,7 @@ class KnytifyClient extends AbstractType
     const BACK_URL = "https://back.knytify.com/";
     protected ?string $api_key = null;
     protected ?int $status_code = null;
-    protected mixed $response = null;
+    protected $response = null; // mixed
     protected ?string $error = null;
 
 

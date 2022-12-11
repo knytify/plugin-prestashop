@@ -1,24 +1,22 @@
 <?php
 
-
-
 namespace Knytify\Controller\Admin;
-
 
 use Symfony\Component\HttpFoundation\Request;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Knytify\Entity\Admin\RegistrationEntity;
-
 use Configuration;
 
 class RegistrationController extends FrameworkBundleAdminController
 {
     public function indexAction(Request $request)
     {
+        $router = SymfonyContainer::getInstance()->get('router');
+
         $api_key = Configuration::get('KNYTIFY_API_KEY', null);
 
         if (!empty($api_key)) {
@@ -36,6 +34,7 @@ class RegistrationController extends FrameworkBundleAdminController
 
         $params = [
             'form' => $form->createView(),
+            'getting_started_link' => $router->generate('ps_controller_getting_started')
         ];
 
         $form->handleRequest($request);
