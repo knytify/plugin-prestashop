@@ -13,12 +13,10 @@ class KnytifyValidation extends AbstractType
     public function validateEmail(string $email): bool
     {
         $this->reset();
-
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $this->error = "The e-mail address must be valid.";
             return false;
         }
-
         return true;
     }
 

@@ -14,7 +14,7 @@ class ConfigurationController extends FrameworkBundleAdminController
         $router = SymfonyContainer::getInstance()->get('router');
         $params = [
             'api_key' => Configuration::get('KNYTIFY_API_KEY'),
-            'getting_started_link' => $router->generate('ps_controller_getting_started_link'),
+            'getting_started_link' => $router->generate('ps_controller_getting_started'),
         ];
         return $this->render(
             '@Modules/knytify/views/templates/admin/configuration.html.twig',

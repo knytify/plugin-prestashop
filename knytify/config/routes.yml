@@ -16,7 +16,7 @@ ps_controller_registration:
 
 ps_controller_login:
     path: knytify/login
-    methods: [GET]
+    methods: [GET, POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\LoginController::indexAction'
         _legacy_controller: "KnytifyLogin"
@@ -24,7 +24,7 @@ ps_controller_login:
 
 ps_controller_api_key:
     path: knytify/api-key
-    methods: [GET]
+    methods: [GET, POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\ApiKeyController::indexAction'
         _legacy_controller: "KnytifyApiKey"
@@ -40,7 +40,7 @@ ps_controller_invalid_api_key:
 
 ps_controller_configuration:
     path: knytify/configuration
-    methods: [GET]
+    methods: [GET, POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::indexAction'
         _legacy_controller: "KnytifyConfiguration"

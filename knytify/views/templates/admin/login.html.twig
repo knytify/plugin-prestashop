@@ -12,19 +12,36 @@
                 <img src="/modules/knytify/logo.png"/>
             </p>
 
-			<p class="card-title">
-				Do you already have an account?
-			</p>
+            {% if success  %}
 
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+                <p class="card-title">
+                    Account associated successfully !<br/><br/>
+                    <a href="{{configuration_link}}">Go to configuration page.</a>
+                </p>
 
-            
-            <p>
-                <a href="{{getting_started_link}}">Choose another authentication method.</a>
-            </p
+            {% else %}
 
+                <p class="card-title">
+                    Log-In to associate with your Knytify account.
+                </p>
+
+
+                {% if error %}
+                    <p class="card-title">
+                        An error happened during the log-in process: <br/>
+                        {{error}}
+                    </p>
+                {% endif %}
+
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+                    
+                <p>
+                    <a href="{{getting_started_link}}">Choose another authentication method.</a>
+                </p
+
+            {% endif %}
         </div>
     </div>
 {% endblock %}

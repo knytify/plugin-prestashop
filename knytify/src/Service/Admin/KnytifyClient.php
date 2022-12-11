@@ -9,7 +9,7 @@ use Knytify\Service\Validation\KnytifyValidation;
 
 class KnytifyClient extends AbstractType
 {
-    const BACK_URL = "https://back.knytify.com/";
+    const BACK_URL = "https://back.knytify.com";
     protected ?string $api_key = null;
     protected ?int $status_code = null;
     protected $response = null; // mixed
@@ -27,7 +27,7 @@ class KnytifyClient extends AbstractType
         $password = $data->getPassword();
 
         $validator = new KnytifyValidation();
-        if (!$validator->validateEmail($email) || $validator->validatePassword($password)) {
+        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
             return false;
         }
@@ -57,18 +57,18 @@ class KnytifyClient extends AbstractType
         $password = $data->getPassword();
 
         $validator = new KnytifyValidation();
-        if (!$validator->validateEmail($email) || $validator->validatePassword($password)) {
+        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
             return false;
         }
 
-        $success = $this->query('/auth/login-for-plugin', [
-            "email" => $data->getUsername(),
+        $success = $this->query('/auth/login-for-plugin/', [
+            "username" => $data->getUsername(),
             "password" => $data->getPassword()
         ]);
 
         if ($success) {
-            $this->api_key = $this->response;
+            $this->api_key = $this->response['api_key'];
         }
 
         return $success;
@@ -90,17 +90,21 @@ class KnytifyClient extends AbstractType
     {
         $this->resetResponse();
 
+        $success = true;
+
         $headers = [];
 
         if (!empty($this->api_key)) {
             $headers[] = 'Api-Key: ' . $this->api_key;
         }
 
-        $ch = curl_init(KnytifyClient::BACK_URL);
+        $ch = curl_init(KnytifyClient::BACK_URL . $path);
 
         try {
 
             if (!empty($payload)) {
+                $payload = json_encode($payload);
+
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                 $headers[] = 'Content-Type: application/json';
@@ -118,20 +122,29 @@ class KnytifyClient extends AbstractType
 
             $success = $this->status_code >= 200 && $this->status_code < 300;
 
+            if (!empty($curl_response)) {
+                $curl_response = json_decode($curl_response, true);
+            }
+
             if ($success) {
-                $this->response = empty($curl_response) ? "" : json_decode($curl_response, true);
+                $this->response = $curl_response;
             } else {
-                $this->error = curl_error($ch);
+                if (!empty($curl_response) && !empty($curl_response['detail'])) {
+                    $this->error = is_array($curl_response['detail']) ? json_encode($curl_response['detail']) : $curl_response['detail'];
+                } else {
+                    $this->error = "CURL Error: " . curl_error($ch);
+                }
             }
 
         } catch (\Throwable $th) {
-            throw $th;
+            $success = false;
+            $this->error = "Exception: " . $th->getMessage();
+            // throw $th;
         } finally {
             curl_close($ch);
         }
 
         return $success;
-
     }
 
     protected function resetResponse()
