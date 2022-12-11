@@ -55,9 +55,14 @@ class Knytify extends Module
         }
 
         $api_key = Configuration::get('KNYTIFY_API_KEY');
+
         if (empty($api_key)) {
             Tools::redirectAdmin(
                 $this->context->link->getAdminLink('KnytifyGettingStarted')
+            );
+        } else {
+            Tools::redirectAdmin(
+                $this->context->link->getAdminLink('KnytifyConfiguration')
             );
         }
     }

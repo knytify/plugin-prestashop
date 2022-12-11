@@ -1,0 +1,28 @@
+{% extends '@!PrestaShop/Admin/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="card login" id="knytify">
+        <div class="card-body card-block">
+
+            <p class="card-title">
+                <img src="/modules/knytify/logo.png"/>
+            </p>
+
+			<p class="card-title">
+                Your Api-Key does not seem to be valid, please, update your credentials <a href="{{getting_started_link}}">here</a>.
+			</p>            
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+

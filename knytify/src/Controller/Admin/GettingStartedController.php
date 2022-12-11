@@ -21,6 +21,7 @@ class GettingStartedController extends FrameworkBundleAdminController
                 'layoutTitle' => 'Getting Started with Knytify',
                 'login_link' => $router->generate('ps_controller_login'),
                 'registration_link' => $router->generate('ps_controller_registration'),
+                'api_key_link' => $router->generate('ps_controller_api_key'),
             )
         );
     }

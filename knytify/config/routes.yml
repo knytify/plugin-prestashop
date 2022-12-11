@@ -1,31 +1,47 @@
 ps_controller_getting_started:
     path: knytify/getting-started
-    methods: [GET]  
+    methods: [GET]
     defaults:
         _controller: 'Knytify\Controller\Admin\GettingStartedController::indexAction'
-        _legacy_controller: 'KnytifyGettingStarted'
+        _legacy_controller: "KnytifyGettingStarted"
         _legacy_link: KnytifyGettingStarted
 
 ps_controller_registration:
     path: knytify/registration
-    methods: [GET, POST]  
+    methods: [GET, POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\RegistrationController::indexAction'
-        _legacy_controller: 'KnytifyRegistration'
+        _legacy_controller: "KnytifyRegistration"
         _legacy_link: KnytifyRegistration
 
 ps_controller_login:
     path: knytify/login
-    methods: [GET]  
+    methods: [GET]
     defaults:
         _controller: 'Knytify\Controller\Admin\LoginController::indexAction'
-        _legacy_controller: 'KnytifyLogin'
+        _legacy_controller: "KnytifyLogin"
         _legacy_link: KnytifyLogin
 
-ps_controller_configuration:
-    path: knytify/getting-started
-    methods: [GET]  
+ps_controller_api_key:
+    path: knytify/api-key
+    methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\GettingStartedController::indexAction'
-        _legacy_controller: 'KnytifyGettingStarted'
-        _legacy_link: KnytifyGettingStarted
+        _controller: 'Knytify\Controller\Admin\ApiKeyController::indexAction'
+        _legacy_controller: "KnytifyApiKey"
+        _legacy_link: KnytifyApiKey
+
+ps_controller_invalid_api_key:
+    path: knytify/invalid-api-key
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\InvalidApiKeyController::indexAction'
+        _legacy_controller: "KnytifyInvalidApiKey"
+        _legacy_link: KnytifyInvalidApiKey
+
+ps_controller_configuration:
+    path: knytify/configuration
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ConfigurationController::indexAction'
+        _legacy_controller: "KnytifyConfiguration"
+        _legacy_link: KnytifyConfiguration

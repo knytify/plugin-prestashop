@@ -39,15 +39,18 @@ class RegistrationController extends FrameworkBundleAdminController
         ];
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = $form->getData();
             $service = $this->get('Knytify\Service\Admin\KnytifyClient');
             $success = $service->register($entity);
             $params['success'] = $success;
-            if (!$success) {
+            if ($success) {
+                $api_key = $service->getResponse()['api_key'];
+                Configuration::updateValue('KNYTIFY_API_KEY', $api_key);
+            } else {
                 $params['error'] = $service->getError();
             }
-            Configuration::updateValue('KNYTIFY_API_KEY', 'fake-api-key-238a89345a89hav');
         }
 
         return $this->render(

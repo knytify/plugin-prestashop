@@ -5,7 +5,7 @@ namespace Knytify\Service\Admin;
 use Symfony\Component\Form\AbstractType;
 use Knytify\Entity\Admin\RegistrationEntity;
 use Knytify\Entity\Admin\LoginEntity;
-
+use Knytify\Service\Validation\KnytifyValidation;
 
 class KnytifyClient extends AbstractType
 {
@@ -23,17 +23,23 @@ class KnytifyClient extends AbstractType
 
     public function register(RegistrationEntity $data): bool
     {
+        $email = $data->getUsername();
+        $password = $data->getPassword();
 
-        // TODO: E-mail regex / Password regex validation.
+        $validator = new KnytifyValidation();
+        if (!$validator->validateEmail($email) || $validator->validatePassword($password)) {
+            $this->error = $validator->getError();
+            return false;
+        }
 
-        if ($data->getPassword() != $data->getPasswordCheck()) {
-            $this->error = "Passwords must match";
+        if ($password != $data->getPasswordCheck()) {
+            $this->error = "Passwords must match.";
             return false;
         }
 
         $success = $this->query('/me/', [
-            "email" => $data->getUsername(),
-            "password" => $data->getPassword(),
+            "email" => $email,
+            "password" => $password,
             "source" => "prestashop"
         ]);
 
@@ -46,6 +52,16 @@ class KnytifyClient extends AbstractType
 
     public function login(LoginEntity $data): bool
     {
+
+        $email = $data->getUsername();
+        $password = $data->getPassword();
+
+        $validator = new KnytifyValidation();
+        if (!$validator->validateEmail($email) || $validator->validatePassword($password)) {
+            $this->error = $validator->getError();
+            return false;
+        }
+
         $success = $this->query('/auth/login-for-plugin', [
             "email" => $data->getUsername(),
             "password" => $data->getPassword()
