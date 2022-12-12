@@ -15,12 +15,6 @@ class KnytifyClient extends AbstractType
     protected $response = null; // mixed
     protected ?string $error = null;
 
-
-    public function __construct(?string $api_key = null)
-    {
-        $this->api_key = $api_key;
-    }
-
     public function register(RegistrationEntity $data): bool
     {
         $email = $data->getUsername();
@@ -44,7 +38,7 @@ class KnytifyClient extends AbstractType
         ]);
 
         if ($success) {
-            $this->api_key = $this->response;
+            $this->api_key = $this->response['api_key'];
         }
 
         return $success;
@@ -176,5 +170,17 @@ class KnytifyClient extends AbstractType
     public function getError()
     {
         return $this->error;
+    }
+
+    /**
+     * Set the value of api_key
+     *
+     * @return  self
+     */
+    public function setApiKey($api_key)
+    {
+        $this->api_key = $api_key;
+
+        return $this;
     }
 }

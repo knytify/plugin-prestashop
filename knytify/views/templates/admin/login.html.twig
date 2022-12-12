@@ -8,6 +8,10 @@
     <div class="card login" id="knytify">
         <div class="card-body card-block">
 
+            <div class="btn-holder">
+                <a href="{{getting_started_link}}" class="knyt-btn">Other authentication methods</a>
+            </div>
+            
             <p class="card-title">
                 <img src="/modules/knytify/logo.png"/>
             </p>
@@ -22,9 +26,8 @@
             {% else %}
 
                 <p class="card-title">
-                    Log-In to associate with your Knytify account.
+                    Associate your Knytify account with your Api-Key.
                 </p>
-
 
                 {% if error %}
                     <p class="card-title">
@@ -36,10 +39,6 @@
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 {{ form_end(form) }}
-                    
-                <p>
-                    <a href="{{getting_started_link}}">Choose another authentication method.</a>
-                </p
 
             {% endif %}
         </div>

@@ -18,15 +18,15 @@ class RegistrationController extends FrameworkBundleAdminController
         $router = SymfonyContainer::getInstance()->get('router');
 
         $api_key = Configuration::get('KNYTIFY_API_KEY', null);
-
         if (!empty($api_key)) {
-            return $this->redirectToRoute('ps_controller_configuration');
+            // Do not allow to make a new account if you already had one.
+            return $this->redirectToRoute('ps_controller_getting_started');
         }
 
         $entity = new RegistrationEntity();
 
         $form = $this->createFormBuilder($entity)
-            ->add('username', TextType::class)
+            ->add('username', TextType::class, ['label' => "E-mail address"])
             ->add('password', PasswordType::class)
             ->add('passwordCheck', PasswordType::class)
             ->add('save', SubmitType::class, ['label' => 'Register account'])
@@ -34,7 +34,8 @@ class RegistrationController extends FrameworkBundleAdminController
 
         $params = [
             'form' => $form->createView(),
-            'getting_started_link' => $router->generate('ps_controller_getting_started')
+            'getting_started_link' => $router->generate('ps_controller_getting_started'),
+            'configuration_link' => $router->generate('ps_controller_configuration')
         ];
 
         $form->handleRequest($request);
@@ -47,6 +48,7 @@ class RegistrationController extends FrameworkBundleAdminController
             if ($success) {
                 $api_key = $service->getResponse()['api_key'];
                 Configuration::updateValue('KNYTIFY_API_KEY', $api_key);
+                Configuration::updateValue('KNYTIFY_ENABLED', true);
             } else {
                 $params['error'] = $service->getError();
             }

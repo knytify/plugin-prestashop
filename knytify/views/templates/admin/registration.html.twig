@@ -7,17 +7,25 @@
 {% block content %}
     <div class="card registration" id="knytify">
         <div class="card-body card-block">
-			<div class="panel container">
 
+    
+            <div class="btn-holder">
+                <a href="{{getting_started_link}}" class="knyt-btn">Authenticate instead</a>
+            </div>
+                
             <p class="card-title">
                 <img src="/modules/knytify/logo.png"/>
             </p>
+            
+			<div class="panel container">
+
             
             {% if success  %}
 
                 <p class="card-title">
                     You are now registered !<br/>
-                    You can now confirm your e-mail<br/>
+                    Please, check your e-mail for the confirmation link.<br/><br/>
+                    <a href="{{configuration_link}}">Go to configuration page.</a>
                 </p>
 
             {% else %}
@@ -38,10 +46,6 @@
                 {{ form_widget(form) }}
                 {{ form_end(form) }}
                     
-                <p>
-                    <a href="{{getting_started_link}}">Choose another authentication method.</a>
-                </p
-
             {% endif %}
 
 			</div>

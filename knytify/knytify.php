@@ -41,7 +41,7 @@ class Knytify extends Module
     public function uninstall()
     {
         Configuration::deleteByName('KNYTIFY_ENABLED');
-        Configuration::deleteByName('KNYTIFY_API_KEY');
+        // Configuration::deleteByName('KNYTIFY_API_KEY');
         return parent::uninstall();
     }
 

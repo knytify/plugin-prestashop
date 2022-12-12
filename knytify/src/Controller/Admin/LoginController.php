@@ -41,6 +41,7 @@ class LoginController extends FrameworkBundleAdminController
                 $api_key = $service->getResponse()['api_key'];
                 if (!empty($api_key)) {
                     Configuration::updateValue('KNYTIFY_API_KEY', $api_key);
+                    Configuration::updateValue('KNYTIFY_ENABLED', true);
                 } else {
                     $params['error'] = "An error happened retrieving the api key";
                     $success = false;
