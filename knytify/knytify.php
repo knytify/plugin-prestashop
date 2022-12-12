@@ -31,7 +31,7 @@ class Knytify extends Module
 
     public function install()
     {
-        Configuration::updateValue('KNYTIFY_ENABLED', false);
+        Configuration::updateValue('KNYTIFY_ENABLED', true);
         return parent::install() &&
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
@@ -40,8 +40,6 @@ class Knytify extends Module
 
     public function uninstall()
     {
-        Configuration::deleteByName('KNYTIFY_ENABLED');
-        // Configuration::deleteByName('KNYTIFY_API_KEY');
         return parent::uninstall();
     }
 
@@ -51,6 +49,10 @@ class Knytify extends Module
         if (!function_exists('curl_version')) {
             return $this->render(
                 '@Modules/knytify/views/templates/errors/curl_not_supported.html.twig',
+            );
+        } else if (!Configuration::get('PS_SSL_ENABLED', false)) {
+            return $this->render(
+                '@Modules/knytify/views/templates/errors/no_ssl.html.twig',
             );
         }
 
