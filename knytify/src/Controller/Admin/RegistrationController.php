@@ -43,7 +43,7 @@ class RegistrationController extends FrameworkBundleAdminController
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = $form->getData();
             $service = $this->get('Knytify\Service\Admin\KnytifyClient');
-            $success = $service->register($entity);
+            $success = $service->register($entity, Configuration::get('PS_SHOP_DOMAIN_SSL'));
             $params['success'] = $success;
             if ($success) {
                 $api_key = $service->getResponse()['api_key'];

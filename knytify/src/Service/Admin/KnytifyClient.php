@@ -15,7 +15,7 @@ class KnytifyClient extends AbstractType
     protected $response = null; // mixed
     protected ?string $error = null;
 
-    public function register(RegistrationEntity $data): bool
+    public function register(RegistrationEntity $data, ?string $domain = null): bool
     {
         $email = $data->getUsername();
         $password = $data->getPassword();
@@ -31,11 +31,17 @@ class KnytifyClient extends AbstractType
             return false;
         }
 
-        $success = $this->query('/me/', [
+        $body = [
             "email" => $email,
             "password" => $password,
             "source" => "prestashop"
-        ]);
+        ];
+
+        if (!empty($domain)) {
+            $body["authorize_domain"] = $domain;
+        }
+
+        $success = $this->query('/me/', $body);
 
         if ($success) {
             $this->api_key = $this->response['api_key'];
@@ -44,7 +50,7 @@ class KnytifyClient extends AbstractType
         return $success;
     }
 
-    public function login(LoginEntity $data): bool
+    public function login(LoginEntity $data, ?string $domain = null): bool
     {
 
         $email = $data->getUsername();
@@ -56,10 +62,16 @@ class KnytifyClient extends AbstractType
             return false;
         }
 
-        $success = $this->query('/auth/login-for-plugin/', [
+        $body = [
             "username" => $data->getUsername(),
             "password" => $data->getPassword()
-        ]);
+        ];
+
+        if (!empty($domain)) {
+            $body["authorize_domain"] = $domain;
+        }
+
+        $success = $this->query('/auth/login-for-plugin/', $body);
 
         if ($success) {
             $this->api_key = $this->response['api_key'];
@@ -73,7 +85,10 @@ class KnytifyClient extends AbstractType
         return $this->query('/me/');
     }
 
-
+    public function postDomain(string $domain): bool
+    {
+        return $this->query('/me/domain/', ['domain' => $domain]);
+    }
     public function getStats(): bool
     {
 

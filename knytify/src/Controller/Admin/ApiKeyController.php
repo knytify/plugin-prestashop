@@ -37,6 +37,7 @@ class ApiKeyController extends FrameworkBundleAdminController
             $service->setApiKey($entity->getApiKey());
             $success = $service->getUser();
             if ($success) {
+                $service->postDomain(Configuration::get('PS_SHOP_DOMAIN_SSL'));
                 Configuration::updateValue('KNYTIFY_API_KEY', $entity->getApiKey());
                 Configuration::updateValue('KNYTIFY_ENABLED', true);
             } else {

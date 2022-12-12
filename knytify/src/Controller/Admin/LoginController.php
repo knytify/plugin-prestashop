@@ -36,7 +36,7 @@ class LoginController extends FrameworkBundleAdminController
         if ($form->isSubmitted()) { //  && $form->isValid()
             $entity = $form->getData();
             $service = $this->get('Knytify\Service\Admin\KnytifyClient');
-            $success = $service->login($entity);
+            $success = $service->login($entity, Configuration::get('PS_SHOP_DOMAIN_SSL'));
             if ($success) {
                 $api_key = $service->getResponse()['api_key'];
                 if (!empty($api_key)) {

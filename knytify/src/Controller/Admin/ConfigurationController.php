@@ -13,12 +13,11 @@ class ConfigurationController extends FrameworkBundleAdminController
 {
     public function indexAction(Request $request)
     {
-
         $router = SymfonyContainer::getInstance()->get('router');
 
         $config = new ConfigurationEntity();
 
-        if ($request->isMethod('post')) {
+        if (!$request->isMethod('post')) {
             $config->setEnabled(Configuration::get('KNYTIFY_ENABLED', false));
         }
 
