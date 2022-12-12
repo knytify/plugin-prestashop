@@ -12,6 +12,16 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 class Knytify extends Module
 {
+
+    // public $tabs = [
+    //     [
+    //         'name' => 'Knytify Stats',
+    //         'class_name' => 'Stats',
+    //         'visible' => true,
+    //         'parent_class_name' => 'AdminStats',
+    //     ],
+    // ];
+
     public function __construct()
     {
         $this->name = 'knytify';
@@ -33,6 +43,7 @@ class Knytify extends Module
     {
         Configuration::updateValue('KNYTIFY_ENABLED', true);
         return parent::install() &&
+            $this->installTab() &&
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
             $this->registerHook('displayBeforeBodyClosingTag');
@@ -40,8 +51,56 @@ class Knytify extends Module
 
     public function uninstall()
     {
-        return parent::uninstall();
+        return parent::uninstall()
+            && $this->uninstallTab();
     }
+
+
+    public function enable($force_all = false)
+    {
+        Configuration::updateValue('KNYTIFY_ENABLED', true);
+        return parent::enable($force_all)
+            && $this->installTab()
+        ;
+    }
+
+    public function disable($force_all = false)
+    {
+        Configuration::updateValue('KNYTIFY_ENABLED', false);
+        return parent::disable($force_all)
+            && $this->uninstallTab()
+        ;
+    }
+
+    private function installTab()
+    {
+        // https://devdocs.prestashop-project.org/1.7/modules/concepts/controllers/admin-controllers/tabs/#manual-tab-insertion
+        $tabId = (int) Tab::getIdFromClassName('KnytifyStats');
+        if (!$tabId) {
+            $tabId = null;
+        }
+        $tab = new Tab($tabId);
+        $tab->active = 1;
+        $tab->class_name = 'KnytifyStats';
+        $tab->name = array();
+        foreach (Language::getLanguages() as $lang) {
+            $tab->name[$lang['id_lang']] = "Knytify Stats";
+        }
+        $tab->id_parent = (int) Tab::getIdFromClassName('AdminStats');
+        $tab->module = $this->name;
+        return $tab->save();
+    }
+
+    private function uninstallTab()
+    {
+        $tabId = (int) Tab::getIdFromClassName('KnytifyStats');
+        if (!$tabId) {
+            return true;
+        }
+        $tab = new Tab($tabId);
+        return $tab->delete();
+    }
+
 
     public function getContent()
     {

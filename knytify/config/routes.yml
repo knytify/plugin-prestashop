@@ -45,3 +45,11 @@ ps_controller_configuration:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::indexAction'
         _legacy_controller: "KnytifyConfiguration"
         _legacy_link: KnytifyConfiguration
+
+ps_controller_stats:
+    path: knytify/stats
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\StatsController::indexAction'
+        _legacy_controller: "KnytifyStats"
+        _legacy_link: KnytifyStats

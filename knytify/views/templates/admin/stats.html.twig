@@ -1,0 +1,46 @@
+{% extends '@!PrestaShop/Admin/layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="card login" id="knytify">
+        <div class="card-body card-block">
+
+            <div class="btn-holder">
+                <a href="{{configuration_link}}" class="knyt-btn">Go to configuration</a>
+            </div>
+            
+            <p class="card-title">
+                <img src="/modules/knytify/logo.png"/>
+            </p>
+
+            {% if stats  %}
+
+                <p class="card-title">
+                    Number of sessions: {{stats.num_sessions_this_month}} this month (previous month {{stats.num_sessions_prev_month}})
+                </p>
+
+                <p class="card-title">
+                    Number of fraud sessions: {{stats.num_fraud_this_month}} this month (previous month {{stats.num_fraud_prev_month}})
+                </p>
+
+            {% elseif error %}
+
+                <p class="card-title">
+                    An error happened during the log-in process: <br/>
+                    {{error}}
+                </p>
+
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+
+
