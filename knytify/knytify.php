@@ -94,12 +94,21 @@ class Knytify extends Module
 
     public function getContent()
     {
-
+        /**
+         * Fallbacks
+         */
         if (!function_exists('curl_version')) {
+            /**
+             * CURL is required to communicate with Knytify (to receive fraud scorings)
+             */
             return $this->render(
                 '@Modules/knytify/views/templates/errors/curl_not_supported.html.twig',
             );
         } else if (!Configuration::get('PS_SSL_ENABLED', false)) {
+            /**
+             * The Knytify API which receives data from the Javascript tag,
+             * does not allow any traffic from non-ssl websites.
+             */
             return $this->render(
                 '@Modules/knytify/views/templates/errors/no_ssl.html.twig',
             );
@@ -120,36 +129,43 @@ class Knytify extends Module
 
     public function hookDisplayBackOfficeHeader($params)
     {
+        $current_controller_name = $this->context->controller->controller_name;
+
         if (
-            Tools::getIsset('controller') &&
-            Tools::getValue('controller') == 'KnytifyStats'
+            $current_controller_name === 'KnytifyStats'
         ) {
+            /**
+             * We want to use a custom stats page.
+             * We chose ChartJS so we can control its version, without conflicting with Prestashop nvd3.
+             */
             $this->context->controller->addJS($this->_path . 'views/js/vendor/chartjs-4.1.1.min.js');
-            // $this->context->controller->addJS($this->_path . 'views/js/vendor/d3-3.5.17.min.js');
-            // $this->context->controller->addJS($this->_path . 'views/js/vendor/nv.d3-1.8.6.min.js');
-            // $this->context->controller->addCSS($this->_path . 'views/css/vendor/nv.d3.min.css',);
+        } else if (
+            str_starts_with($current_controller_name, "Knytify")
+        ) {
+            /**
+             * Configuration page JS/CSS
+             */
+            $this->context->controller->addJS($this->_path . 'views/js/back.js');
+            $this->context->controller->addCSS($this->_path . 'views/css/back.css');
         }
 
-        $this->context->controller->addJS($this->_path . 'views/js/back.js');
-        $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+        return false;
     }
 
     public function hookHeader()
     {
-        $this->context->controller->addJS($this->_path . '/views/js/front.js');
-    }
-
-
-    public function hookDisplayBeforeBodyClosingTag()
-    {
         if (Configuration::get('KNYTIFY_ENABLED')) {
+
+            // A single json-encoded dictionary is used to avoid multiple sql queries.
+            $script_config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', '');
+
             return '
             <script src="https://live.knytify.com/tag/main.js"></script>
             <script>
-              window.knytify.init();
+              window.knytify.init(' . $script_config . ');
             </script>';
-        } else {
-            return '';
         }
+
+        return false;
     }
 }
