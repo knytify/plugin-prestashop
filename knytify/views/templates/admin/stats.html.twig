@@ -5,18 +5,22 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card login" id="knytify">
+    <div id="knytify" class="card login knytify-stats">
         <div class="card-body card-block">
 
             <div class="btn-holder">
                 <a href="{{configuration_link}}" class="knyt-btn">Go to configuration</a>
             </div>
-            
+
             <p class="card-title">
                 <img src="/modules/knytify/logo.png"/>
             </p>
 
             {% if stats  %}
+
+                <div class="chart-container-utm">
+                    <canvas id="chart-utm"></canvas>
+                </div>
 
                 <p class="card-title">
                     Number of sessions: {{stats.num_sessions_this_month}} this month (previous month {{stats.num_sessions_prev_month}})
@@ -41,6 +45,3 @@
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-
-
-

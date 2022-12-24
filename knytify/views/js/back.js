@@ -1,27 +1,84 @@
+
 /**
-* 2007-2022 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author    PrestaShop SA <contact@prestashop.com>
-*  @copyright 2007-2022 PrestaShop SA
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*
-* Don't forget to prefix your containers with your own identifier
-* to avoid any conflicts with others containers.
-*/
+ * Page stats
+ *
+ */
+
+if (document.querySelector("#knytify.knytify-stats")) {
+
+    var data = {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+        datasets: [{
+            label: "Dataset #1",
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 2,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [65, 59, 20, 81, 56, 55, 40],
+        }]
+    };
+
+    var options = {
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                stacked: true,
+                grid: {
+                    display: true,
+                    color: "rgba(255,99,132,0.2)"
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    };
+
+    new Chart('chart-utm', {
+        type: 'bar',
+        options: options,
+        data: data
+    });
+
+    // const data = [
+    //     {
+    //         key: "Cumulative Return",
+    //         values: [
+    //             {
+    //                 "label": "B Label",
+    //                 "value": 0
+    //             },
+    //             {
+    //                 "label": "C Label",
+    //                 "value": 32.807804682612
+    //             },
+    //             {
+    //                 "label": "D Label",
+    //                 "value": 196.45946739256
+    //             },
+    //             {
+    //                 "label": "E Label",
+    //                 "value": 0.19434030906893
+    //             },
+    //         ]
+    //     }
+    // ]
+
+    // nv.addGraph(function () {
+    //     var chart = nv.models.discreteBarChart()
+    //         .x(function (d) { return d.label })
+    //         .y(function (d) { return d.value })
+    //         .staggerLabels(true)
+
+    //     d3.select('#chart-utm svg')
+    //         .datum(data)
+    //         .call(chart);
+
+
+    //     return chart;
+    // });
+
+}

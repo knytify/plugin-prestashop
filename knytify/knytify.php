@@ -1,7 +1,8 @@
 <?php
+
 /**
- *  @author    Jean-François Kener, Aurélien Savart
- *  @copyright 2007-2023 Knytify SARL
+ *  @author    Jean-François Kener
+ *  @copyright 2022-2023 Knytify SARL
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -12,15 +13,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 class Knytify extends Module
 {
-
-    // public $tabs = [
-    //     [
-    //         'name' => 'Knytify Stats',
-    //         'class_name' => 'Stats',
-    //         'visible' => true,
-    //         'parent_class_name' => 'AdminStats',
-    //     ],
-    // ];
 
     public function __construct()
     {
@@ -60,16 +52,14 @@ class Knytify extends Module
     {
         Configuration::updateValue('KNYTIFY_ENABLED', true);
         return parent::enable($force_all)
-            && $this->installTab()
-        ;
+            && $this->installTab();
     }
 
     public function disable($force_all = false)
     {
         Configuration::updateValue('KNYTIFY_ENABLED', false);
         return parent::disable($force_all)
-            && $this->uninstallTab()
-        ;
+            && $this->uninstallTab();
     }
 
     private function installTab()
@@ -128,8 +118,18 @@ class Knytify extends Module
         }
     }
 
-    public function hookDisplayBackOfficeHeader()
+    public function hookDisplayBackOfficeHeader($params)
     {
+        if (
+            Tools::getIsset('controller') &&
+            Tools::getValue('controller') == 'KnytifyStats'
+        ) {
+            $this->context->controller->addJS($this->_path . 'views/js/vendor/chartjs-4.1.1.min.js');
+            // $this->context->controller->addJS($this->_path . 'views/js/vendor/d3-3.5.17.min.js');
+            // $this->context->controller->addJS($this->_path . 'views/js/vendor/nv.d3-1.8.6.min.js');
+            // $this->context->controller->addCSS($this->_path . 'views/css/vendor/nv.d3.min.css',);
+        }
+
         $this->context->controller->addJS($this->_path . 'views/js/back.js');
         $this->context->controller->addCSS($this->_path . 'views/css/back.css');
     }
@@ -152,5 +152,4 @@ class Knytify extends Module
             return '';
         }
     }
-
 }
