@@ -89,13 +89,35 @@ class KnytifyClient extends AbstractType
     {
         return $this->query('/me/domain/', ['domain' => $domain]);
     }
+
     public function getStats(): bool
     {
-
         return $this->query('/stats/graphs/');
     }
 
-    public function query($path, $payload = null): bool
+    public function getStatsUTM(): bool
+    {
+        return $this->getStatsAdvanced([
+            "utm_source", "utm_medium", "utm_name", "utm_id"
+        ]);
+    }
+
+    public function getStatsAdvanced(array $dimensions, string $interval = 'daily', \DateTime $from_date = null)
+    {
+        $dimensions_str = implode(",", $dimensions);
+
+        if (empty($from_date)) {
+            $from_date = new \DateTime('1 month ago');
+        }
+
+        return $this->query('/stats/advanced/', [
+            "dimensions" => $dimensions_str,
+            "interval" => $interval,
+            "from_date" => $from_date->format('Y-m-d')
+        ], 'GET');
+    }
+
+    public function query($path, $payload = null, string $method = null): bool
     {
         $this->resetResponse();
 
@@ -107,19 +129,27 @@ class KnytifyClient extends AbstractType
             $headers[] = 'Api-Key: ' . $this->api_key;
         }
 
-        $ch = curl_init(KnytifyClient::BACK_URL . $path);
+        $ch = curl_init();
+
+        $url = KnytifyClient::BACK_URL . $path;
 
         try {
 
             if (!empty($payload)) {
-                $payload = json_encode($payload);
 
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-                $headers[] = 'Content-Type: application/json';
-                $headers[] = 'Content-Length: ' . strlen($payload);
+                if ($method == 'GET') {
+                    $url .= '?' . http_build_query($payload);
+                } else {
+                    $payload = json_encode($payload);
+
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+                    $headers[] = 'Content-Type: application/json';
+                    $headers[] = 'Content-Length: ' . strlen($payload);
+                }
             }
 
+            curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HEADER, false); // Do not return headers
@@ -144,7 +174,6 @@ class KnytifyClient extends AbstractType
                     $this->error = "CURL Error: " . curl_error($ch);
                 }
             }
-
         } catch (\Throwable $th) {
             $success = false;
             $this->error = "Exception: " . $th->getMessage();

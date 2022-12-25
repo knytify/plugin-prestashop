@@ -9,6 +9,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+
 require_once __DIR__ . '/vendor/autoload.php';
 
 class Knytify extends Module
@@ -29,6 +30,8 @@ class Knytify extends Module
         $this->description = $this->l('Advanced traffic quality evaluation, fraud detection & prevention');
         $this->confirmUninstall = $this->l('Uninstalling this plugin will stop prevention against low quality traffic. Do you wish to proceed uninstalling it?');
         $this->ps_versions_compliancy = array('min' => '1.7.5', 'max' => '1.9.9');
+
+        $this->local_development = substr_compare(_PS_BASE_URL_, ".local", -strlen(".local")) === 0;
     }
 
     public function install()
@@ -94,25 +97,8 @@ class Knytify extends Module
 
     public function getContent()
     {
-        /**
-         * Fallbacks
-         */
-        if (!function_exists('curl_version')) {
-            /**
-             * CURL is required to communicate with Knytify (to receive fraud scorings)
-             */
-            return $this->render(
-                '@Modules/knytify/views/templates/errors/curl_not_supported.html.twig',
-            );
-        } else if (!Configuration::get('PS_SSL_ENABLED', false)) {
-            /**
-             * The Knytify API which receives data from the Javascript tag,
-             * does not allow any traffic from non-ssl websites.
-             */
-            return $this->render(
-                '@Modules/knytify/views/templates/errors/no_ssl.html.twig',
-            );
-        }
+
+        $this->handleErrors();
 
         $api_key = Configuration::get('KNYTIFY_API_KEY');
 
@@ -127,26 +113,44 @@ class Knytify extends Module
         }
     }
 
+    private function handleErrors()
+    {
+        $error = null;
+
+        if (!Configuration::get('PS_SSL_ENABLED', false) && !$this->local_development) {
+            // The Knytify API blocks non-ssl requests.
+            $error = "ssl";
+        }
+
+        if (!empty($error)) {
+            // Combine both ways of passing args with getAdminLink
+            // https://devdocs.prestashop-project.org/1.7/modules/core-updates/1.7.5/
+            Tools::redirectAdmin(
+                $this->context->link->getAdminLink('KnytifyError', true, [], ['error' => $error]) . '&amp;error=' . $error
+            );
+        }
+    }
+
     public function hookDisplayBackOfficeHeader($params)
     {
         $current_controller_name = $this->context->controller->controller_name;
 
+
         if (
-            $current_controller_name === 'KnytifyStats'
-        ) {
-            /**
-             * We want to use a custom stats page.
-             * We chose ChartJS so we can control its version, without conflicting with Prestashop nvd3.
-             */
-            $this->context->controller->addJS($this->_path . 'views/js/vendor/chartjs-4.1.1.min.js');
-        } else if (
             str_starts_with($current_controller_name, "Knytify")
         ) {
-            /**
-             * Configuration page JS/CSS
-             */
             $this->context->controller->addJS($this->_path . 'views/js/back.js');
             $this->context->controller->addCSS($this->_path . 'views/css/back.css');
+
+            if (
+                $current_controller_name === 'KnytifyStats'
+            ) {
+                /**
+                 * We want to use a custom stats page.
+                 * We chose ChartJS so we can control its version, without conflicting with Prestashop nvd3.
+                 */
+                $this->context->controller->addJS($this->_path . 'views/js/vendor/chartjs-4.1.1.min.js');
+            }
         }
 
         return false;

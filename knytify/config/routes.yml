@@ -30,14 +30,6 @@ ps_controller_api_key:
         _legacy_controller: "KnytifyApiKey"
         _legacy_link: KnytifyApiKey
 
-ps_controller_invalid_api_key:
-    path: knytify/invalid-api-key
-    methods: [GET]
-    defaults:
-        _controller: 'Knytify\Controller\Admin\InvalidApiKeyController::indexAction'
-        _legacy_controller: "KnytifyInvalidApiKey"
-        _legacy_link: KnytifyInvalidApiKey
-
 ps_controller_configuration:
     path: knytify/configuration
     methods: [GET, POST]
@@ -53,3 +45,12 @@ ps_controller_stats:
         _controller: 'Knytify\Controller\Admin\StatsController::indexAction'
         _legacy_controller: "KnytifyStats"
         _legacy_link: KnytifyStats
+
+
+ps_controller_error:
+    path: knytify/error
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ErrorController::indexAction'
+        _legacy_controller: "KnytifyError"
+        _legacy_link: KnytifyError

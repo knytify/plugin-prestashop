@@ -13,8 +13,12 @@
             </p>
 
 			<p class="card-title">
+                {% if error == 'ssl' %}
+                This plug-in requires SSL enabled (https://...).
+                {% elseif error == 'apikey' %}
                 Your Api-Key does not seem to be valid, please, update your credentials <a href="{{getting_started_link}}">here</a>.
-			</p>            
+                {% endif %}
+			</p>
 
         </div>
     </div>
@@ -23,6 +27,3 @@
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-
-
-

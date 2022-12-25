@@ -13,6 +13,11 @@
     font-size: 20px;
     padding: 20px;
 }
+#knytify .card-title > span {
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 25px;
+}
 
 #knytify.getting-started .options {
     text-align: center;
@@ -63,15 +68,36 @@
  * Page stats
  *
  */
-/* #knytify.knytify-stats svg {
-    display: block;
+.chart-container {
+    position:relative;
+    margin-bottom: 40px;
+    padding: 25px;
+    padding-top:40px; /*Space for title*/
 }
 
-#knytify.knytify-stats #chart {
-    width: 600px;
+.chart-container > canvas {
+}
+
+.chart-container > h1 {
+    position:absolute;
+    top: 0;
+    /* left: 50%;
+    transform: translate(-50%,0); */
+}
+
+
+#knytify.knytify-stats .charts-container {
+    display:flex;
+    flex-wrap: wrap;
+}
+
+#knytify.knytify-stats .chart-container-small {
     height: 400px;
-} */
-#knytify.knytify-stats .chart-container-utm {
+    width: 550px;
+}
+
+
+#knytify.knytify-stats .chart-container-wide {
     height: 400px;
-    width: 600px;
+    width: 800px;
 }
