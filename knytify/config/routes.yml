@@ -38,6 +38,18 @@ ps_controller_configuration:
         _legacy_controller: "KnytifyConfiguration"
         _legacy_link: KnytifyConfiguration
 
+ps_controller_configuration_set:
+    path: knytify/configuration/api
+    methods: [POST]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ConfigurationController::setConfig'
+
+ps_controller_configuration_get:
+    path: knytify/configuration/api
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ConfigurationController::getConfig'
+
 ps_controller_stats:
     path: knytify/stats
     methods: [GET]

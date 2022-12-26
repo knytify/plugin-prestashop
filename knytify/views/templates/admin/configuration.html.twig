@@ -5,32 +5,23 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card login" id="knytify">
-        <div class="card-body card-block">
+    <div>
 
-            <div class="btn-holder">
-                <a href="{{getting_started_link}}" class="knyt-btn">Update credentials</a>
-            </div>
-            
-            <p class="card-title">
-                <img src="/modules/knytify/logo.png"/>
-            </p>
+    <script>
+        var knytify = {{ knytify|json_encode|raw }}
+    </script>
 
-			<p class="card-title">
-				Configuration
-			</p>
+    <link href="{{pathApp}}" rel=preload as=script>
 
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+    <div id="app"></div>
+    <script src="{{chunkVendor}}"></script>
+    <script src="{{pathApp}}"></script>
 
-        </div>
     </div>
+
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
 {% endblock %}
-
-
-
