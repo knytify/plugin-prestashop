@@ -1,4 +1,4 @@
-ps_controller_getting_started:
+ps_knytify_getting_started:
     path: knytify/getting-started
     methods: [GET]
     defaults:
@@ -6,7 +6,7 @@ ps_controller_getting_started:
         _legacy_controller: "KnytifyGettingStarted"
         _legacy_link: KnytifyGettingStarted
 
-ps_controller_registration:
+ps_knytify_registration:
     path: knytify/registration
     methods: [GET, POST]
     defaults:
@@ -14,7 +14,7 @@ ps_controller_registration:
         _legacy_controller: "KnytifyRegistration"
         _legacy_link: KnytifyRegistration
 
-ps_controller_login:
+ps_knytify_login:
     path: knytify/login
     methods: [GET, POST]
     defaults:
@@ -22,7 +22,7 @@ ps_controller_login:
         _legacy_controller: "KnytifyLogin"
         _legacy_link: KnytifyLogin
 
-ps_controller_api_key:
+ps_knytify_api_key:
     path: knytify/api-key
     methods: [GET, POST]
     defaults:
@@ -30,7 +30,7 @@ ps_controller_api_key:
         _legacy_controller: "KnytifyApiKey"
         _legacy_link: KnytifyApiKey
 
-ps_controller_configuration:
+ps_knytify_configuration:
     path: knytify/configuration
     methods: [GET, POST]
     defaults:
@@ -38,19 +38,19 @@ ps_controller_configuration:
         _legacy_controller: "KnytifyConfiguration"
         _legacy_link: KnytifyConfiguration
 
-ps_controller_configuration_set:
+ps_knytify_configuration_set:
     path: knytify/configuration/api
     methods: [POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::setConfig'
 
-ps_controller_configuration_get:
+ps_knytify_configuration_get:
     path: knytify/configuration/api
     methods: [GET]
     defaults:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::getConfig'
 
-ps_controller_stats:
+ps_knytify_stats:
     path: knytify/stats
     methods: [GET]
     defaults:
@@ -58,8 +58,19 @@ ps_controller_stats:
         _legacy_controller: "KnytifyStats"
         _legacy_link: KnytifyStats
 
+ps_knytify_stats_graphs:
+    path: knytify/stats-graphs
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\StatsController::graphs'
 
-ps_controller_error:
+ps_knytify_stats_advanced:
+    path: knytify/stats-advanced
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\StatsController::advanced'
+
+ps_knytify_error:
     path: knytify/error
     methods: [GET]
     defaults:

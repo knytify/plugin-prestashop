@@ -19,9 +19,9 @@ class GettingStartedController extends FrameworkBundleAdminController
             '@Modules/knytify/views/templates/admin/getting_started.html.twig',
             array(
                 'layoutTitle' => 'Getting Started with Knytify',
-                'login_link' => $router->generate('ps_controller_login'),
-                'registration_link' => $router->generate('ps_controller_registration'),
-                'api_key_link' => $router->generate('ps_controller_api_key'),
+                'login_link' => $router->generate('ps_knytify_login'),
+                'registration_link' => $router->generate('ps_knytify_registration'),
+                'api_key_link' => $router->generate('ps_knytify_api_key'),
             )
         );
     }

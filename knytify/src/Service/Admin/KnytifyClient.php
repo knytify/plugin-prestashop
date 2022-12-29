@@ -3,82 +3,20 @@
 namespace Knytify\Service\Admin;
 
 use Symfony\Component\Form\AbstractType;
-use Knytify\Entity\Admin\RegistrationEntity;
-use Knytify\Entity\Admin\LoginEntity;
 use Knytify\Service\Validation\KnytifyValidation;
+use Symfony\Component\HttpFoundation\Request;
 
 class KnytifyClient extends AbstractType
 {
+    /**
+     * A lightweight, curl-based, client for Knytify back-end API.
+     */
+
     const BACK_URL = "https://back.knytify.com";
     protected ?string $api_key = null;
     protected ?int $status_code = null;
     protected $response = null; // mixed
     protected ?string $error = null;
-
-    public function register(RegistrationEntity $data, ?string $domain = null): bool
-    {
-        $email = $data->getUsername();
-        $password = $data->getPassword();
-
-        $validator = new KnytifyValidation();
-        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
-            $this->error = $validator->getError();
-            return false;
-        }
-
-        if ($password != $data->getPasswordCheck()) {
-            $this->error = "Passwords must match.";
-            return false;
-        }
-
-        $body = [
-            "email" => $email,
-            "password" => $password,
-            "source" => "prestashop"
-        ];
-
-        if (!empty($domain)) {
-            $body["authorize_domain"] = $domain;
-        }
-
-        $success = $this->query('/me/', $body);
-
-        if ($success) {
-            $this->api_key = $this->response['api_key'];
-        }
-
-        return $success;
-    }
-
-    public function login(LoginEntity $data, ?string $domain = null): bool
-    {
-
-        $email = $data->getUsername();
-        $password = $data->getPassword();
-
-        $validator = new KnytifyValidation();
-        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
-            $this->error = $validator->getError();
-            return false;
-        }
-
-        $body = [
-            "username" => $data->getUsername(),
-            "password" => $data->getPassword()
-        ];
-
-        if (!empty($domain)) {
-            $body["authorize_domain"] = $domain;
-        }
-
-        $success = $this->query('/auth/login-for-plugin/', $body);
-
-        if ($success) {
-            $this->api_key = $this->response['api_key'];
-        }
-
-        return $success;
-    }
 
     public function getUser(): bool
     {
@@ -90,30 +28,24 @@ class KnytifyClient extends AbstractType
         return $this->query('/me/domain/', ['domain' => $domain]);
     }
 
-    public function getStats(): bool
+    public function getStatsGraphs(Request $request): bool
     {
         return $this->query('/stats/graphs/');
     }
 
-    public function getStatsUTM(): bool
+    public function getStatsAdvanced(Request $request): bool //array $dimensions, string $interval = 'daily', \DateTime $from_date = null)
     {
-        return $this->getStatsAdvanced([
-            "utm_source", "utm_medium", "utm_name", "utm_id"
-        ]);
-    }
-
-    public function getStatsAdvanced(array $dimensions, string $interval = 'daily', \DateTime $from_date = null)
-    {
-        $dimensions_str = implode(",", $dimensions);
+    //     $dimensions_str = implode(",", $dimensions);
+        $from_date = $request->get('from_date', null);
 
         if (empty($from_date)) {
-            $from_date = new \DateTime('1 month ago');
+            $from_date = (new \DateTime('1 month ago'))->format('Y-m-d');
         }
 
         return $this->query('/stats/advanced/', [
-            "dimensions" => $dimensions_str,
-            "interval" => $interval,
-            "from_date" => $from_date->format('Y-m-d')
+            "dimensions" => $request->query->get('dimensions'),
+            "interval" => $request->query->get('interval', 'daily'),
+            "from_date" => $from_date
         ], 'GET');
     }
 

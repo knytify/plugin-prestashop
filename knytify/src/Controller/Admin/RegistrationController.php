@@ -20,7 +20,7 @@ class RegistrationController extends FrameworkBundleAdminController
         $api_key = Configuration::get('KNYTIFY_API_KEY', null);
         if (!empty($api_key)) {
             // Do not allow to make a new account if you already had one.
-            return $this->redirectToRoute('ps_controller_getting_started');
+            return $this->redirectToRoute('ps_knytify_getting_started');
         }
 
         $entity = new RegistrationEntity();
@@ -34,8 +34,8 @@ class RegistrationController extends FrameworkBundleAdminController
 
         $params = [
             'form' => $form->createView(),
-            'getting_started_link' => $router->generate('ps_controller_getting_started'),
-            'configuration_link' => $router->generate('ps_controller_configuration')
+            'getting_started_link' => $router->generate('ps_knytify_getting_started'),
+            'configuration_link' => $router->generate('ps_knytify_configuration')
         ];
 
         $form->handleRequest($request);

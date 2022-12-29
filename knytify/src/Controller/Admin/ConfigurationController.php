@@ -22,12 +22,14 @@ class ConfigurationController extends FrameworkBundleAdminController
         $router = SymfonyContainer::getInstance()->get('router');
 
         $params = [
+            // "knytify" is passed to the window, to be used on the Vue app.
             'knytify' => [
                 "base_url" => _PS_BASE_URL_,
                 "links" =>  [
-                    'getting_started_' => $router->generate('ps_controller_getting_started'),
-                    'configuration_set' => $router->generate('ps_controller_configuration_set'),
-                    'configuration_get' => $router->generate('ps_controller_configuration_get'),
+                    'getting_started_' => $router->generate('ps_knytify_getting_started'),
+                    'configuration_set' => $router->generate('ps_knytify_configuration_set'),
+                    'configuration_get' => $router->generate('ps_knytify_configuration_get'),
+                    'stats' => $router->generate('ps_knytify_stats'),
                 ]
             ],
             // Vue app params
@@ -36,7 +38,7 @@ class ConfigurationController extends FrameworkBundleAdminController
         ];
 
         return $this->render(
-            '@Modules/knytify/views/templates/admin/configuration.html.twig',
+            '@Modules/knytify/views/templates/admin/app.html.twig',
             $params
         );
     }

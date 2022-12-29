@@ -19,7 +19,7 @@ class ErrorController extends FrameworkBundleAdminController
             '@Modules/knytify/views/templates/admin/error.html.twig',
             [
                 'error' => $error,
-                'getting_started_link' => $router->generate('ps_controller_getting_started')
+                'getting_started_link' => $router->generate('ps_knytify_getting_started')
             ]
         );
     }

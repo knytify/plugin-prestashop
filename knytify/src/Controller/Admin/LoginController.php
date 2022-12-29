@@ -27,8 +27,8 @@ class LoginController extends FrameworkBundleAdminController
 
         $params = [
             'form' => $form->createView(),
-            'getting_started_link' => $router->generate('ps_controller_getting_started'),
-            'configuration_link' => $router->generate('ps_controller_configuration'),
+            'getting_started_link' => $router->generate('ps_knytify_getting_started'),
+            'configuration_link' => $router->generate('ps_knytify_configuration'),
             'success' => null,
             'error' => null,
         ];
