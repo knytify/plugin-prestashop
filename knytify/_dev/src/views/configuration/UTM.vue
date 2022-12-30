@@ -5,7 +5,8 @@
         <v-container>
           <v-row>
             <v-col cols="12" sm="6">
-              You can customize the name of the UTM parameters to be analyzed. This will allow them to appear in your stats.
+              You can customize the name of the UTM parameters to be analyzed.
+              This will allow them to appear in your stats.
             </v-col>
           </v-row>
           <v-row>
@@ -23,18 +24,17 @@
               <v-text-field
                 label="UTM medium*"
                 placeholder="utm_medium"
-                v-model="utmSource"
+                v-model="utmMedium"
                 hide-details
               />
             </v-col>
-
           </v-row>
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
                 label="UTM Campaign name"
                 placeholder="utm_name"
-                v-model="utmSource"
+                v-model="utmName"
                 hide-details
               />
             </v-col>
@@ -44,7 +44,7 @@
               <v-text-field
                 label="UTM Campaign ID"
                 placeholder="utm_id"
-                v-model="utmSource"
+                v-model="utmId"
                 hide-details
               />
             </v-col>
@@ -67,30 +67,62 @@ export default {
   data() {
     return {
       form: {
-        tag_config: {
-          utm: {
-            utm_source: "",
-          },
-        },
+        utm: {},
       },
     };
   },
   computed: {
     ...mapState({
-      init: (state) => state.configuration.init,
-      configuration: (state) => state.configuration.configuration,
+      init: (state) => state.configuration_script.init,
+      configuration_script: (state) => state.configuration_script.configuration,
     }),
     utmSource: {
       set(v) {
-        this.form.tag_config.utm.utm_source = v;
+        this.form.utm.utm_source = v;
       },
       get() {
-        return this.form.tag_config.utm.utm_source;
+        return this.form.utm.utm_source;
+      },
+    },
+    utmMedium: {
+      set(v) {
+        this.form.utm.utm_medium = v;
+      },
+      get() {
+        return this.form.utm.utm_medium;
+      },
+    },
+    utmName: {
+      set(v) {
+        if (v === "") {
+          if (this.form.utm.utm_name) {
+            delete this.form.utm.utm_name;
+          }
+        } else {
+          this.form.utm.utm_name = v;
+        }
+      },
+      get() {
+        return this.form.utm.utm_name;
+      },
+    },
+    utmId: {
+      set(v) {
+        if (v === "") {
+          if (this.form.utm.utm_id) {
+            delete this.form.utm.utm_id;
+          }
+        } else {
+          this.form.utm.utm_id = v;
+        }
+      },
+      get() {
+        return this.form.utm.utm_id;
       },
     },
   },
   created() {
-    this.$store.dispatch("configuration/getConfig");
+    this.$store.dispatch("configuration_script/getScriptConfig");
   },
   watch: {
     init() {
@@ -99,16 +131,31 @@ export default {
   },
   methods: {
     reset() {
-      // this.form = JSON.parse(JSON.stringify(this.configuration));
+      let configuration = this.configuration_script
+        ? JSON.parse(JSON.stringify(this.configuration_script))
+        : { utm: {} };
+      console.log(configuration, "_-");
+      this.form = configuration;
     },
     save() {
-      this.$store.dispatch("configuration/setConfig", this.form).then(() => {
+      if (this.form.utm.utm_source === "" || this.form.utm.utm_medium === "") {
         this.$store.dispatch("alerts/addAlert", {
-          title: "Success",
-          text: "The configuration has been saved",
-          level: "success",
+          title: "Validation error",
+          text: "You must fill a value for the source and the medium",
+          level: "warning",
         });
-      });
+        return;
+      }
+
+      this.$store
+        .dispatch("configuration_script/setScriptConfig", this.form)
+        .then(() => {
+          this.$store.dispatch("alerts/addAlert", {
+            title: "Success",
+            text: "The configuration has been saved",
+            level: "success",
+          });
+        });
     },
   },
   name: "Configuration",

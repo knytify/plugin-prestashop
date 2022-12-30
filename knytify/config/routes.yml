@@ -39,16 +39,30 @@ ps_knytify_configuration:
         _legacy_link: KnytifyConfiguration
 
 ps_knytify_configuration_set:
-    path: knytify/configuration/api
+    path: knytify/configuration/rest
     methods: [POST]
     defaults:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::setConfig'
 
 ps_knytify_configuration_get:
-    path: knytify/configuration/api
+    path: knytify/configuration/rest
     methods: [GET]
     defaults:
         _controller: 'Knytify\Controller\Admin\ConfigurationController::getConfig'
+
+
+ps_knytify_configuration_script_set:
+    path: knytify/configuration-script/rest
+    methods: [POST]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ConfigurationController::setScriptConfig'
+
+ps_knytify_configuration_script_get:
+    path: knytify/configuration-script/rest
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\ConfigurationController::getScriptConfig'
+
 
 ps_knytify_stats:
     path: knytify/stats

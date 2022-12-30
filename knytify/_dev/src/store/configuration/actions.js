@@ -14,7 +14,8 @@ const getConfig = async (context) => {
     });
 }
 
+
 export default {
     setConfig,
-    getConfig
+    getConfig,
 }

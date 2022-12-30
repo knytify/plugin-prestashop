@@ -26,9 +26,10 @@ class ConfigurationController extends FrameworkBundleAdminController
             'knytify' => [
                 "base_url" => _PS_BASE_URL_,
                 "links" =>  [
-                    'getting_started_' => $router->generate('ps_knytify_getting_started'),
                     'configuration_set' => $router->generate('ps_knytify_configuration_set'),
                     'configuration_get' => $router->generate('ps_knytify_configuration_get'),
+                    'configuration_script_set' => $router->generate('ps_knytify_configuration_script_set'),
+                    'configuration_script_get' => $router->generate('ps_knytify_configuration_script_get'),
                     'stats' => $router->generate('ps_knytify_stats'),
                 ]
             ],
@@ -45,6 +46,9 @@ class ConfigurationController extends FrameworkBundleAdminController
 
     public function getConfig(Request $request)
     {
+        /**
+         * Gets the general plugin configuration
+         */
         return new JsonResponse([
             "enabled" => Configuration::get('KNYTIFY_ENABLED', false)
         ]);
@@ -52,6 +56,9 @@ class ConfigurationController extends FrameworkBundleAdminController
 
     public function setConfig(Request $request)
     {
+        /**
+         * Sets the general plugin configuration
+         */
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['enabled'])) {
@@ -64,6 +71,26 @@ class ConfigurationController extends FrameworkBundleAdminController
             Configuration::updateValue('KNYTIFY_ENABLED', $enabled);
         }
 
-        return new Response();
+        return new Response('Updated', 201);
+    }
+
+    public function getScriptConfig(Request $request)
+    {
+        /**
+         * Gets the Knytify JS Tag configuration
+         */
+        $config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', null);
+        $config = empty($config) ? [] : json_decode($config, true);
+        return new JsonResponse($config);
+    }
+
+    public function setScriptConfig(Request $request)
+    {
+        /**
+         * Updates the Knytify JS Tag configuration
+         */
+        $data = $request->getContent();
+        Configuration::updateValue('KNYTIFY_SCRIPT_CONFIG', $data);
+        return new Response('Updated', 201);
     }
 }

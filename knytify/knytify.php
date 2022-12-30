@@ -50,7 +50,6 @@ class Knytify extends Module
             && $this->uninstallTab();
     }
 
-
     public function enable($force_all = false)
     {
         Configuration::updateValue('KNYTIFY_ENABLED', true);
