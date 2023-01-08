@@ -70,19 +70,6 @@
  */
 .chart-container {
     position:relative;
-    margin-bottom: 40px;
-    padding: 25px;
-    padding-top:40px; /*Space for title*/
-}
-
-.chart-container > canvas {
-}
-
-.chart-container > h1 {
-    position:absolute;
-    top: 0;
-    /* left: 50%;
-    transform: translate(-50%,0); */
 }
 
 

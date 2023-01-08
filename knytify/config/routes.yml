@@ -72,11 +72,11 @@ ps_knytify_stats:
         _legacy_controller: "KnytifyStats"
         _legacy_link: KnytifyStats
 
-ps_knytify_stats_graphs:
-    path: knytify/stats-graphs
+ps_knytify_stats_recap:
+    path: knytify/stats-recap
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\StatsController::graphs'
+        _controller: 'Knytify\Controller\Admin\StatsController::recap'
 
 ps_knytify_stats_advanced:
     path: knytify/stats-advanced

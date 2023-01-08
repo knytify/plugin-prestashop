@@ -29,8 +29,7 @@ class StatsController extends FrameworkBundleAdminController
                     // Plugin page
                     'configuration' => $router->generate('ps_knytify_configuration'),
                     // Curl Proxies
-                    'stats_graphs' => $router->generate('ps_knytify_stats_graphs'),
-                    'stats_getStatsAdvanced' => $router->generate('ps_knytify_stats_advanced'),
+                    'stats_recap' => $router->generate('ps_knytify_stats_recap'),
                 ]
             ],
             // Vue scripts to be injected to the page
@@ -44,12 +43,12 @@ class StatsController extends FrameworkBundleAdminController
         );
     }
 
-    public function graphs(Request $request)
+    public function recap(Request $request)
     {
         /**
          * Rest proxy to knytify stats/graphs
          */
-        return $this->proxy('getStatsGraphs', $request);
+        return $this->proxy('getStatsRecap', $request);
     }
 
     public function advanced(Request $request)

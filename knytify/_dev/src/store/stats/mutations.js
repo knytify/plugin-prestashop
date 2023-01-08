@@ -1,28 +1,17 @@
 export default {
-    SET_STATS_GRAPHS(state, { request, response }) {
-        let new_init = { ...state.init_graphs }
-        new_init[request.interval] = true
-        state.init_graphs = new_init; // must change the entire object so it triggers compute
-
-        let new_stats = { ...state.stats_graphs }
-        new_stats[request.interval] = response
-        state.stats_graphs = new_stats
-
+    SET_STATS_RECAP(state, { request, response }) {
+        state.init_recap = true
+        state.stats_recap = response
     },
-    RESET_STATS_GRAPHS(state, { request }) {
-        if (request.interval) {
-            state.init_graphs[request.interval] = {};
-            state.stats_graphs[request.interval] = {}
-        } else {
-            state.init = {};
-            state.stats_graphs = {}
-        }
+    RESET_STATS_RECAP(state, { request }) {
+        state.init_recap = false;
+        state.stats_recap = {};
     },
-    SET_STATS_ADV(state, { response }) {
+    SET_STATS_ADVANCED(state, { response }) {
         state.init_adv = true;
         state.stats_adv = response
     },
-    RESET_STATS_ADV(state) {
+    RESET_STATS_ADVANCED(state) {
         state.init_adv = false;
         state.stats_adv = {}
     },

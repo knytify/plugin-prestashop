@@ -28,14 +28,14 @@ class KnytifyClient extends AbstractType
         return $this->query('/me/domain/', ['domain' => $domain]);
     }
 
-    public function getStatsGraphs(Request $request): bool
+    public function getStatsRecap(Request $request): bool
     {
-        return $this->query('/stats/graphs/');
+        return $this->query('/stats/recap/');
     }
 
     public function getStatsAdvanced(Request $request): bool //array $dimensions, string $interval = 'daily', \DateTime $from_date = null)
     {
-    //     $dimensions_str = implode(",", $dimensions);
+        //     $dimensions_str = implode(",", $dimensions);
         $from_date = $request->get('from_date', null);
 
         if (empty($from_date)) {
