@@ -14,6 +14,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 class Knytify extends Module
 {
+    /**
+     * @var ServiceContainer
+     */
+    private $container;
+
 
     public function __construct()
     {
@@ -32,6 +37,14 @@ class Knytify extends Module
         $this->ps_versions_compliancy = array('min' => '1.7.5', 'max' => '1.9.9');
 
         $this->local_development = substr_compare(_PS_BASE_URL_, ".local", -strlen(".local")) === 0;
+
+
+        if ($this->container === null) {
+            $this->container = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
+                $this->name,
+                $this->getLocalPath()
+            );
+        }
     }
 
     public function install()
@@ -41,7 +54,8 @@ class Knytify extends Module
             $this->installTab() &&
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
-            $this->registerHook('displayBeforeBodyClosingTag');
+            $this->registerHook('displayBeforeBodyClosingTag') &&
+            $this->container->getService('ps_accounts.installer')->install();
     }
 
     public function uninstall()
@@ -96,11 +110,47 @@ class Knytify extends Module
 
     public function getContent()
     {
-
+        /**
+         * Configuration errors (eg. https required)
+         */
         $this->handleErrors();
 
-        $api_key = Configuration::get('KNYTIFY_API_KEY');
+        /**
+         * PS Account & Billing
+         */
 
+         $accountsService = null;
+
+         try {
+             $accountsFacade = $this->container->getService('ps_accounts.facade');
+             $accountsService = $accountsFacade->getPsAccountsService();
+         } catch (\PrestaShop\PsAccountsInstaller\Installer\Exception\InstallerException $e) {
+             $accountsInstaller = $this->getService('ps_accounts.installer');
+             $accountsInstaller->install();
+             $accountsFacade = $this->container->getService('ps_accounts.facade');
+             $accountsService = $accountsFacade->getPsAccountsService();
+         }
+
+         try {
+             Media::addJsDef([
+                 'contextPsAccounts' => $accountsFacade->getPsAccountsPresenter()
+                     ->present($this->name),
+             ]);
+
+             // Retrieve Account CDN
+             $this->context->smarty->assign('urlAccountsCdn', $accountsService->getAccountsCdn());
+
+         } catch (Exception $e) {
+            //  $this->context->controller->errors[] = $e->getMessage();
+            //  return '';
+            // TODO: handle this error too
+         }
+
+
+        /**
+         * Knytify configuration
+         */
+        $api_key = Configuration::get('KNYTIFY_API_KEY');
         if (empty($api_key)) {
             Tools::redirectAdmin(
                 $this->context->link->getAdminLink('KnytifyGettingStarted')

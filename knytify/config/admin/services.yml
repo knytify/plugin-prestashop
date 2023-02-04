@@ -1,14 +1,41 @@
 services:
 
-#   # The name of the service must match the full namespace class
-#   Knytify\Controller\GettingStartedController:
-#     class: Knytify\Controller\GettingStartedController
-#     arguments:
-#       - '@doctrine.cache.provider'
+  _defaults:
+    public: true
 
 
-services:
-    Knytify\Service\Admin\KnytifyClient:
-      class: Knytify\Service\Admin\KnytifyClient
-        # arguments: ['@doctrine.orm.entity_manager']
-        # tags: [form.type]
+  #   # The name of the service must match the full namespace class
+  #   Knytify\Controller\GettingStartedController:
+  #     class: Knytify\Controller\GettingStartedController
+  #     arguments:
+  #       - '@doctrine.cache.provider'
+
+  Knytify\Service\Admin\KnytifyClient:
+    class: Knytify\Service\Admin\KnytifyClient
+      # arguments: ['@doctrine.orm.entity_manager']
+      # tags: [form.type]
+
+
+  # Deps. for PS Account
+
+  knytify.module:
+    class: knytify
+    factory: ['Module', 'getInstanceByName']
+    arguments:
+      - 'knytify'
+
+  knytify.context:
+    class: Context
+    factory: ['Context', 'getContext']
+
+  # PS Account
+
+  ps_accounts.installer:
+    class: 'PrestaShop\PsAccountsInstaller\Installer\Installer'
+    arguments:
+      - '5.0'
+
+  ps_accounts.facade:
+    class: 'PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
+    arguments:
+      - '@ps_accounts.installer'
