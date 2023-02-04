@@ -55,7 +55,7 @@ class Knytify extends Module
             $this->registerHook('header') &&
             $this->registerHook('displayBackOfficeHeader') &&
             $this->registerHook('displayBeforeBodyClosingTag') &&
-            $this->container->getService('ps_accounts.installer')->install();
+            $this->getService('ps_accounts.installer')->install();
     }
 
     public function uninstall()
@@ -110,44 +110,14 @@ class Knytify extends Module
 
     public function getContent()
     {
+
         /**
          * Configuration errors (eg. https required)
          */
         $this->handleErrors();
 
-        /**
-         * PS Account & Billing
-         */
 
-         $accountsService = null;
-
-         try {
-             $accountsFacade = $this->container->getService('ps_accounts.facade');
-             $accountsService = $accountsFacade->getPsAccountsService();
-         } catch (\PrestaShop\PsAccountsInstaller\Installer\Exception\InstallerException $e) {
-             $accountsInstaller = $this->getService('ps_accounts.installer');
-             $accountsInstaller->install();
-             $accountsFacade = $this->container->getService('ps_accounts.facade');
-             $accountsService = $accountsFacade->getPsAccountsService();
-         }
-
-         try {
-             Media::addJsDef([
-                 'contextPsAccounts' => $accountsFacade->getPsAccountsPresenter()
-                     ->present($this->name),
-             ]);
-
-             // Retrieve Account CDN
-             $this->context->smarty->assign('urlAccountsCdn', $accountsService->getAccountsCdn());
-
-         } catch (Exception $e) {
-            //  $this->context->controller->errors[] = $e->getMessage();
-            //  return '';
-            // TODO: handle this error too
-         }
-
-
-        /**
+         /**
          * Knytify configuration
          */
         $api_key = Configuration::get('KNYTIFY_API_KEY');
@@ -220,5 +190,18 @@ class Knytify extends Module
         }
 
         return false;
+    }
+
+
+    /**
+     * Retrieve the service
+     *
+     * @param string $serviceName
+     *
+     * @return mixed
+     */
+    public function getService($serviceName)
+    {
+        return $this->container->getService($serviceName);
     }
 }

@@ -5,8 +5,9 @@
 {% endblock %}
 
 {% block content %}
-    <div>
+    <prestashop-accounts></prestashop-accounts>
 
+    <div>
     <script>
         var knytify = {{ knytify|json_encode|raw }}
     </script>
@@ -18,10 +19,19 @@
     <script src="{{pathApp}}"></script>
 
     </div>
-
-
 {% endblock %}
+
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="{{urlAccountsCdn}}" rel=preload></script>
+
+    <script>
+        window?.psaccountsVue?.init();
+
+        if(window.psaccountsVue.isOnboardingCompleted() != true)
+        {
+            document.getElementById("module-config").style.opacity = "0.5";
+        }
+    </script>
 {% endblock %}

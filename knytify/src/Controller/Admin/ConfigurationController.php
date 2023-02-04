@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 use Module;
+use Media;
 
 class ConfigurationController extends FrameworkBundleAdminController
 {
@@ -20,6 +21,19 @@ class ConfigurationController extends FrameworkBundleAdminController
     {
         $module = Module::getInstanceByName('knytify');
         $router = SymfonyContainer::getInstance()->get('router');
+
+
+        /**
+         * PS Account & Billing
+         */
+        $accountsFacade = $module->getService('ps_accounts.facade');
+        $accountsService = $accountsFacade->getPsAccountsService();
+        Media::addJsDef([
+            'contextPsAccounts' => $accountsFacade->getPsAccountsPresenter()
+                ->present($module->name),
+        ]);
+
+
 
         $params = [
             // "knytify" is passed to the window, to be used on the Vue app.
@@ -35,7 +49,9 @@ class ConfigurationController extends FrameworkBundleAdminController
             ],
             // Vue app params
             'pathApp' => $module->getPathUri() . "views/js/vue/js/app.js",
-            'chunkVendor' => $module->getPathUri() . "views/js/vue/js/chunk-vendors.js"
+            'chunkVendor' => $module->getPathUri() . "views/js/vue/js/chunk-vendors.js",
+            // PS Accounts
+            'urlAccountsCdn' => $accountsService->getAccountsCdn(),
         ];
 
         return $this->render(
