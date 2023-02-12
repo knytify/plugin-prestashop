@@ -22,6 +22,16 @@ class ComposerStaticInit4d34ffa8dbf10d72f17faf9851fc3f7b
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Knytify' => __DIR__ . '/../..' . '/knytify.php',
+        'Knytify\\Controller\\Admin\\ConfigurationController' => __DIR__ . '/../..' . '/src/Controller/Admin/ConfigurationController.php',
+        'Knytify\\Controller\\Admin\\ErrorController' => __DIR__ . '/../..' . '/src/Controller/Admin/ErrorController.php',
+        'Knytify\\Controller\\Admin\\StatsController' => __DIR__ . '/../..' . '/src/Controller/Admin/StatsController.php',
+        'Knytify\\Entity\\Admin\\ApiKeyEntity' => __DIR__ . '/../..' . '/src/Entity/Admin/ApiKeyEntity.php',
+        'Knytify\\Entity\\Admin\\ConfigurationEntity' => __DIR__ . '/../..' . '/src/Entity/Admin/ConfigurationEntity.php',
+        'Knytify\\Entity\\Admin\\LoginEntity' => __DIR__ . '/../..' . '/src/Entity/Admin/LoginEntity.php',
+        'Knytify\\Entity\\Admin\\RegistrationEntity' => __DIR__ . '/../..' . '/src/Entity/Admin/RegistrationEntity.php',
+        'Knytify\\Service\\Admin\\KnytifyClient' => __DIR__ . '/../..' . '/src/Service/Admin/KnytifyClient.php',
+        'Knytify\\Service\\Validation\\KnytifyValidation' => __DIR__ . '/../..' . '/src/Service/Validation/KnytifyValidation.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

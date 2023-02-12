@@ -3,7 +3,6 @@ services:
   _defaults:
     public: true
 
-
   #   # The name of the service must match the full namespace class
   #   Knytify\Controller\GettingStartedController:
   #     class: Knytify\Controller\GettingStartedController
@@ -15,9 +14,7 @@ services:
       # arguments: ['@doctrine.orm.entity_manager']
       # tags: [form.type]
 
-
-  # Deps. for PS Account
-
+  # Deps. for PS
   knytify.module:
     class: knytify
     factory: ['Module', 'getInstanceByName']
@@ -28,14 +25,6 @@ services:
     class: Context
     factory: ['Context', 'getContext']
 
-  # PS Account
-
-  ps_accounts.installer:
-    class: 'PrestaShop\PsAccountsInstaller\Installer\Installer'
-    arguments:
-      - '5.0'
-
-  ps_accounts.facade:
-    class: 'PrestaShop\PsAccountsInstaller\Installer\Facade\PsAccounts'
-    arguments:
-      - '@ps_accounts.installer'
+imports:
+  - { resource: ./ps_accounts.yml }
+  - { resource: ./ps_billing.yml }

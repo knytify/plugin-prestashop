@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Module;
 use Media;
+use Context;
 
 class ConfigurationController extends FrameworkBundleAdminController
 {
@@ -24,7 +25,12 @@ class ConfigurationController extends FrameworkBundleAdminController
 
 
         /**
-         * PS Account & Billing
+         * PS Account
+         *
+         * This component will set information about the linked account in window.contextPsAccounts
+         *
+         * To check whethert he account is associated, window.contextPsAccounts.user has the e-mail or null.
+         * To do the same in the backend, $accountsService->isAccountLinked();
          */
         $accountsFacade = $module->getService('ps_accounts.facade');
         $accountsService = $accountsFacade->getPsAccountsService();
@@ -34,11 +40,27 @@ class ConfigurationController extends FrameworkBundleAdminController
         ]);
 
 
+        /**
+         * PS Billing
+         * https://docs.cloud.prestashop.com/4-account-and-billing/#backend
+         */
+        $billingFacade = $module->getService('ps_billings.facade');
+        $partnerLogo = $module->getPathUri() . "logo.png";
+
+        // Billing
+        Media::addJsDef($billingFacade->present([
+            'logo' => $partnerLogo,
+            'tosLink' => 'https://www.knytify.com/terms.html',
+            'privacyLink' => 'https://www.knytify.com/privacy.html',
+            'emailSupport' => 'inquiry@knytify.com',
+        ]));
+
 
         $params = [
             // "knytify" is passed to the window, to be used on the Vue app.
             'knytify' => [
-                "base_url" => _PS_BASE_URL_,
+                "base_url" => rtrim(Context::getContext()->shop->getBaseURL(true), "/"), // _PS_BASE_URL_ fails to present https:// sometimes.
+                // Another way: see getShopUrl in ps_accounts module
                 "links" =>  [
                     'configuration_set' => $router->generate('ps_knytify_configuration_set'),
                     'configuration_get' => $router->generate('ps_knytify_configuration_get'),
