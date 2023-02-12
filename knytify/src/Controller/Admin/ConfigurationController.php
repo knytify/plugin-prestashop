@@ -17,17 +17,18 @@ class ConfigurationController extends FrameworkBundleAdminController
 {
     public function indexAction(Request $request)
     {
-        $module = Module::getInstanceByName('knytify');
         $router = SymfonyContainer::getInstance()->get('router');
-
+        $module = Module::getInstanceByName('knytify');
 
         /**
          * PS Account
          *
-         * This component will set information about the linked account in window.contextPsAccounts
+         * Sets window.contextPsAccounts
          *
-         * To check whethert he account is associated, window.contextPsAccounts.user has the e-mail or null.
-         * To do the same in the backend, $accountsService->isAccountLinked();
+         * If associated, window.contextPsAccounts.user holds the e-mail instead of null,
+         * and $accountsService->isAccountLinked() returns true.
+         *
+         * https://docs.cloud.prestashop.com/4-account-and-billing/#backend
          */
         $accountsFacade = $module->getService('ps_accounts.facade');
         $accountsService = $accountsFacade->getPsAccountsService();
@@ -36,22 +37,22 @@ class ConfigurationController extends FrameworkBundleAdminController
                 ->present($module->name),
         ]);
 
-
         /**
          * PS Billing
+         *
+         * Sets window.psBillingContext
+         *
+         * If subscribed, billingContext.user.email holds the e-mail.
+         *
          * https://docs.cloud.prestashop.com/4-account-and-billing/#backend
          */
         $billingFacade = $module->getService('ps_billings.facade');
-        $partnerLogo = $module->getPathUri() . "logo.png";
-
-        // Billing
         Media::addJsDef($billingFacade->present([
-            'logo' => $partnerLogo,
+            'logo' => $module->getLocalPath() . 'logo.png',
             'tosLink' => 'https://www.knytify.com/terms.html',
             'privacyLink' => 'https://www.knytify.com/privacy.html',
             'emailSupport' => 'inquiry@knytify.com',
         ]));
-
 
         $params = [
             // "knytify" is passed to the window, to be used on the Vue app.
@@ -66,9 +67,11 @@ class ConfigurationController extends FrameworkBundleAdminController
                     'stats' => $router->generate('ps_knytify_stats'),
                 ]
             ],
+
             // Vue app params
             'pathApp' => $module->getPathUri() . "views/js/vue/js/app.js",
             'chunkVendor' => $module->getPathUri() . "views/js/vue/js/chunk-vendors.js",
+
             // PS Accounts
             'urlAccountsCdn' => $accountsService->getAccountsCdn(),
         ];

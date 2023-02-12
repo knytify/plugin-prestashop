@@ -5,28 +5,28 @@
 {% endblock %}
 
 {% block content %}
-    <prestashop-accounts></prestashop-accounts>
 
-    <div>
-    <script>
-        var knytify = {{ knytify|json_encode|raw }}
-    </script>
-
+    <link href="{{urlAccountsCdn}}" rel=preload></script>
+    <link href="{{chunkVendor}}" rel=preload as=script></script>
     <link href="{{pathApp}}" rel=preload as=script>
 
+    <prestashop-accounts></prestashop-accounts>
     <div id="app"></div>
-    <script src="{{chunkVendor}}"></script>
-    <script src="{{pathApp}}"></script>
-
-    </div>
 {% endblock %}
 
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{urlAccountsCdn}}" rel=preload></script>
 
     <script>
+        var knytify = {{ knytify|json_encode|raw }}
+    </script>
+
+    <script src="{{urlAccountsCdn}}" type="text/javascript"></script>
+    <script src="{{chunkVendor}}"></script>
+    <script src="{{pathApp}}"></script>
+
+    <script type="text/javascript">
         window?.psaccountsVue?.init();
 
         if(window.psaccountsVue.isOnboardingCompleted() != true)

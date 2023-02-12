@@ -1,7 +1,26 @@
+const webpack = require("webpack");
+// const fs = require('fs');
+// const packageJson = fs.readFileSync('./package.json')
+// const version = JSON.parse(packageJson).version || 0
+
 const { defineConfig } = require('@vue/cli-service')
 const path = require('path');
 
 module.exports = defineConfig({
+  parallel: false,
+
+  configureWebpack: {
+    plugins: [
+        new webpack.ProvidePlugin({
+            cash: "cash-dom",
+        }),
+    ],
+    // output: {
+    //     filename: `app-knytify.${version}.js`,
+    //     chunkFilename: `chunk-vendors-knytify.${version}.js`
+    // }
+  },
+
   chainWebpack: (config) => {
     // Stop generating the HTML page
     config.plugins.delete('html');

@@ -1,28 +1,22 @@
 <template>
   <div>
-    <ps-billing-customer
-      v-if="billingContext.user.email"
-      ref="psBillingCustomerRef"
-      :context="billingContext"
-      :onOpenModal="openBillingModal"
-      :hideInvoiceList="true"
-    />
-    <ps-billing-modal
-      v-if="modalType !== ''"
-      :context="billingContext"
-      :type="modalType"
-      :onCloseModal="closeBillingModal"
-    />
-    <div v-if="sub && sub.id">Subscribed</div>
-    <Header controller="KnytifyConfiguration"/>
-    <v-card>
-      <v-tabs>
-        <v-tab @click="tab = 'general'">General</v-tab>
-        <v-tab @click="tab = 'utm'">UTM source</v-tab>
-      </v-tabs>
-      <General v-if="tab == 'general'" />
-      <UTM v-else-if="tab == 'utm'" />
-    </v-card>
+    <div class="mb-3" v-if="billingContext.user.email">
+      <Header controller="KnytifyConfiguration" />
+      <v-card>
+        <v-tabs>
+          <v-tab @click="tab = 'general'">General</v-tab>
+          <v-tab @click="tab = 'utm'">UTM source</v-tab>
+          <v-tab @click="tab = 'subscription'">Subscription</v-tab>
+        </v-tabs>
+        <General v-if="tab == 'general'" />
+        <UTM v-else-if="tab == 'utm'" />
+        <Subscription v-if="tab == 'subscription'" />
+      </v-card>
+    </div>
+
+    <div v-else>
+      <Subscription />
+    </div>
   </div>
 </template>
 
@@ -31,10 +25,7 @@
 import Header from "../components/Header.vue";
 import General from "./General.vue";
 import UTM from "./UTM.vue";
-import {
-  CustomerComponent,
-  ModalContainerComponent,
-} from "@prestashopcorp/billing-cdc/dist/bundle.umd";
+import Subscription from "./Subscription.vue";
 
 export default {
   name: "App",
@@ -47,11 +38,10 @@ export default {
     };
   },
   components: {
-    PsBillingCustomer: CustomerComponent,
-    PsBillingModal: ModalContainerComponent,
     Header,
     General,
     UTM,
+    Subscription,
   },
   provide() {
     return {
