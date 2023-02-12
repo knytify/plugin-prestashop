@@ -6,9 +6,6 @@ use Symfony\Component\HttpFoundation\Request;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Configuration;
-use Knytify\Entity\Admin\ConfigurationEntity;
-use PrestaShopBundle\Form\Admin\Type\SwitchType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

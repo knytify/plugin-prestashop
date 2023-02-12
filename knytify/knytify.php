@@ -117,19 +117,19 @@ class Knytify extends Module
         $this->handleErrors();
 
 
-         /**
-         * Knytify configuration
-         */
-        $api_key = Configuration::get('KNYTIFY_API_KEY');
-        if (empty($api_key)) {
-            Tools::redirectAdmin(
-                $this->context->link->getAdminLink('KnytifyGettingStarted')
-            );
-        } else {
-            Tools::redirectAdmin(
-                $this->context->link->getAdminLink('KnytifyConfiguration')
-            );
-        }
+        Tools::redirectAdmin(
+            $this->context->link->getAdminLink('KnytifyConfiguration')
+        );
+        // $api_key = Configuration::get('KNYTIFY_API_KEY');
+        // if (empty($api_key)) {
+        //     Tools::redirectAdmin(
+        //         $this->context->link->getAdminLink('KnytifyGettingStarted')
+        //     );
+        // } else {
+        //     Tools::redirectAdmin(
+        //         $this->context->link->getAdminLink('KnytifyConfiguration')
+        //     );
+        // }
     }
 
     private function handleErrors()
