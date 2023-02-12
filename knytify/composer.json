@@ -6,7 +6,8 @@
     },
     "classmap": [
       "knytify.php"
-    ]
+    ],
+    "exclude-from-classmap": []
   },
   "config": {
     "preferred-install": "dist",

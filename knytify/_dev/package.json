@@ -8,6 +8,7 @@
     "dev": "vue-cli-service build --no-clean --mode development --watch"
   },
   "dependencies": {
+    "@prestashopcorp/billing-cdc": "^0.0.34",
     "axios": "^1.2.1",
     "core-js": "^3.8.3",
     "sass": "^1.57.1",

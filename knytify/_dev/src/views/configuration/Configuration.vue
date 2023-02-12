@@ -1,6 +1,5 @@
 <template>
   <div>
-    </prestashop-accounts>
     <ps-billing-customer
       v-if="billingContext.user.email"
       ref="psBillingCustomerRef"
