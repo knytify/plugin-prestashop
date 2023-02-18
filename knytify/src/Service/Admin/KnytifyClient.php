@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class KnytifyClient extends AbstractType
 {
     /**
-     * A lightweight, curl-based, client for Knytify back-end API.
+     * A client for Knytify back-end API.
      */
 
     const BACK_URL = "https://back.knytify.com";
@@ -18,24 +18,94 @@ class KnytifyClient extends AbstractType
     protected $response = null; // mixed
     protected ?string $error = null;
 
-    public function getUser(): bool
+    public function setupPassword(string $email, string $password, string $password_check, ?string $domain = null): bool
     {
-        return $this->query('/me/');
+        /**
+         * On subscription, the account is automatically created, but we need still the user to setup a password to
+         * complete the account creation and retrieve an api key, which will allow the plug-in to communicate with Knytify.
+         */
+
+        $validator = new KnytifyValidation();
+        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
+            $this->error = $validator->getError();
+            return false;
+        }
+
+        if ($password != $password_check) {
+            $this->error = "Passwords must match.";
+            return false;
+        }
+
+        $body = [
+            "email" => $email,
+            "password" => $password,
+            "source" => "prestashop"
+        ];
+
+        if (!empty($domain)) {
+            $body["authorize_domain"] = $domain;
+        }
+
+        $success = $this->query('/me/', $body);
+
+        if ($success) {
+            $this->api_key = $this->response['api_key'];
+        }
+
+        return $success;
     }
 
-    public function postDomain(string $domain): bool
+    public function login(string $email, string $password, ?string $domain = null): bool
     {
-        return $this->query('/me/domain/', ['domain' => $domain]);
+        /**
+         * Log-in if the account already exists, and associate the api-key.
+         */
+        $validator = new KnytifyValidation();
+        if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
+            $this->error = $validator->getError();
+            return false;
+        }
+
+        $body = [
+            "username" => $email,
+            "password" => $password
+        ];
+
+        if (!empty($domain)) {
+            $body["authorize_domain"] = $domain;
+        }
+
+        $success = $this->query('/auth/login-for-plugin/', $body);
+
+        if ($success) {
+            $this->api_key = $this->response['api_key'];
+        }
+
+        return $success;
+    }
+
+    public function getUser(): bool
+    {
+        /**
+         * This route is useful to test wether the current Api-Key is valid.
+         */
+        return $this->query('/me/');
     }
 
     public function getStatsRecap(Request $request): bool
     {
+        /**
+         * Retrieves data that is processed in Knytify backend,
+         * to be displayed in the stats page.
+         */
         return $this->query('/stats/recap/');
     }
 
-    public function getStatsAdvanced(Request $request): bool //array $dimensions, string $interval = 'daily', \DateTime $from_date = null)
+    public function getStatsAdvanced(Request $request): bool
     {
-        //     $dimensions_str = implode(",", $dimensions);
+        /**
+         * This method will be useful to explore stats in more detail.
+         */
         $from_date = $request->get('from_date', null);
 
         if (empty($from_date)) {
@@ -51,6 +121,11 @@ class KnytifyClient extends AbstractType
 
     public function query($path, $payload = null, string $method = null): bool
     {
+        /**
+         * Generic HTTP request helper
+         * It injects the Api Key
+         */
+
         $this->resetResponse();
 
         $success = true;
