@@ -10,7 +10,7 @@ class AccountController extends BaseController
 
     public function user(Request $request)
     {
-        return new Response('OK', 200);
+        return $this->knytify_request('getUser', $request);
     }
 
     public function login(Request $request)

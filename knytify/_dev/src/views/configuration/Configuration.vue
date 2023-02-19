@@ -18,7 +18,9 @@
       </div>
 
       <div v-else>
+        <v-card>
         <Subscription />
+        </v-card>
       </div>
     </div>
   </div>
@@ -29,7 +31,7 @@
 import Header from "../components/Header.vue";
 import General from "./General.vue";
 import UTM from "./UTM.vue";
-import Subscription from "./Subscription.vue";
+import Subscription from "./PrestashopSubscription.vue";
 
 export default {
   name: "App",

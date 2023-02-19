@@ -16,6 +16,7 @@ class AppController extends FrameworkBundleAdminController
 
     public function indexAction(Request $request)
     {
+
         $this->router = SymfonyContainer::getInstance()->get('router');
         $this->module = Module::getInstanceByName('knytify');
 
@@ -57,9 +58,9 @@ class AppController extends FrameworkBundleAdminController
             /**
              * Routes to ensure the API key of Knytify is correct.
              */
-            'account' => $this->router->generate('ps_knytify_configuration_script_get'),
-            'account_login' => $this->router->generate('ps_knytify_configuration_script_get'),
-            'account_setup' => $this->router->generate('ps_knytify_configuration_script_set'),
+            'account' => $this->router->generate('ps_knytify_user'),
+            'account_login' => $this->router->generate('ps_knytify_user_login'),
+            'account_setup' => $this->router->generate('ps_knytify_user_setup'),
 
             /**
              * Routes to configure the plugin
@@ -116,6 +117,7 @@ class AppController extends FrameworkBundleAdminController
          */
         $accountsFacade = $this->module->getService('ps_accounts.facade');
         $accountsService = $accountsFacade->getPsAccountsService();
+
         Media::addJsDef([
             'contextPsAccounts' => $accountsFacade->getPsAccountsPresenter()
                 ->present($this->module->name),

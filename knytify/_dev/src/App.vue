@@ -1,23 +1,45 @@
 <template>
   <div>
     <Alerts />
-    <prestashop-accounts
-      v-if="!this.getAccountsVue().isOnboardingCompleted()"
-    ></prestashop-accounts>
-    <KnytifyStats v-else-if="controller == 'KnytifyStats'" />
-    <KnytifyConfiguration v-else-if="controller == 'KnytifyConfiguration'" />
+
+    <!-- Once the account association / subscription are done, we will show these as a configuration tab instead -->
+    <div v-if="page == 'setup'">
+      <!-- Step 1: Prestashop account association -->
+      <prestashop-accounts
+        v-if="!this.getAccountsVue().isOnboardingCompleted()"
+      ></prestashop-accounts>
+
+      <!-- Step 2: Subscription. On the webhook, knytify will create an account if it does not exist. -->
+      <Subscription
+        v-if="
+          this.getAccountsVue().isOnboardingCompleted() &&
+          !psBillingContext?.context?.user?.email
+        "
+      />
+
+      <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
+      <AccountAssociation :email="psBillingContext?.context?.user?.email"/>
+    </div>
+
+    <KnytifyConfiguration v-else-if="page == 'configuration'" />
+    <KnytifyStats v-else-if="page == 'stats'" />
   </div>
 </template>
 
 
 <script>
 import Alerts from "./views/components/Alerts.vue";
+import Header from "./views/components/Header.vue";
+import Subscription from "./views/configuration/PrestashopSubscription.vue";
+import AccountAssociation from "./views/association/AccountAssociation.vue";
 import KnytifyConfiguration from "./views/configuration/Configuration.vue";
 import KnytifyStats from "./views/stats/Stats.vue";
 
 export default {
   name: "App",
-
+  created() {
+    this.$store.dispatch("knytify_account/getUser");
+  },
   mounted() {
     this.getAccountsVue().init();
   },
@@ -33,22 +55,34 @@ export default {
   },
   data: function () {
     return {
+      page: 'setup',
+      // page: window.knytify.page,
+      psBillingContext: window.psBillingContext,
       psAccount: { ...window.contextPsAccounts },
       controller: window.help_class_name, // Prestashop defined
     };
   },
   components: {
+    Alerts,
+    Header,
+    Subscription,
+    AccountAssociation,
     KnytifyConfiguration,
     KnytifyStats,
-    Alerts,
   },
 };
 </script>
 
-<style>
+<style lang="scss">
 #knytify-app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  .title-3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
 }
 </style>

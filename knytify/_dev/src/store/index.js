@@ -4,6 +4,7 @@ import configuration from "./configuration/index";
 import configuration_script from "./configuration_script/index";
 import stats from "./stats/index";
 import alerts from "./alerts/index";
+import knytify_account from "./knytify_account/index";
 
 export default createStore({
   state() {
@@ -16,6 +17,7 @@ export default createStore({
     configuration,
     configuration_script,
     stats,
-    alerts
+    alerts,
+    knytify_account,
   },
 });

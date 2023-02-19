@@ -175,7 +175,9 @@ class KnytifyClient extends AbstractType
             if ($success) {
                 $this->response = $curl_response;
             } else {
-                if (!empty($curl_response) && !empty($curl_response['detail'])) {
+                if ($this->status_code == 401) {
+                    $this->error = "invalid_api_key";
+                } else if (!empty($curl_response) && !empty($curl_response['detail'])) {
                     $this->error = is_array($curl_response['detail']) ? json_encode($curl_response['detail']) : $curl_response['detail'];
                 } else {
                     $this->error = "CURL Error: " . curl_error($ch);
