@@ -19,8 +19,8 @@ class AppController extends FrameworkBundleAdminController
         $this->router = SymfonyContainer::getInstance()->get('router');
         $this->module = Module::getInstanceByName('knytify');
 
-        $ps_accounts = $this->loadPsAccounts();
-        $ps_billing = $this->loadPsBilling();
+        $psAccounts = $this->loadPsAccounts();
+        $this->loadPsBilling();
 
 
         $params = [
@@ -33,11 +33,11 @@ class AppController extends FrameworkBundleAdminController
             ],
 
             // psAccountsvue
-            'urlAccountsCdn' => $accountsService->getAccountsCdn(),
+            'urlAccountsCdn' => $psAccounts->getAccountsCdn(),
 
             // Vue app params
-            'pathApp' => $module->getPathUri() . "views/js/vue/js/app.js",
-            'chunkVendor' => $module->getPathUri() . "views/js/vue/js/chunk-vendors.js",
+            'pathApp' => $this->module->getPathUri() . "views/js/vue/js/app.js",
+            'chunkVendor' => $this->module->getPathUri() . "views/js/vue/js/chunk-vendors.js",
 
         ];
 
@@ -47,21 +47,22 @@ class AppController extends FrameworkBundleAdminController
         );
     }
 
-    private function getLinks() {
+    private function getLinks()
+    {
 
         /**
          * The REST routes used by the app
          */
         $links = [
             /**
-             * Links to ensure the API key of Knytify is correct.
+             * Routes to ensure the API key of Knytify is correct.
              */
             'account' => $this->router->generate('ps_knytify_configuration_script_get'),
             'account_login' => $this->router->generate('ps_knytify_configuration_script_get'),
             'account_setup' => $this->router->generate('ps_knytify_configuration_script_set'),
 
             /**
-             * Links to configure the plugin
+             * Routes to configure the plugin
              */
             'configuration_set' => $this->router->generate('ps_knytify_configuration_set'),
             'configuration_get' => $this->router->generate('ps_knytify_configuration_get'),
@@ -75,12 +76,13 @@ class AppController extends FrameworkBundleAdminController
             /**
              * Link for the stats page.
              */
-            'stats' => $this->router->generate('ps_knytify_stats'),
+            'stats' => $this->router->generate('knytify_stats'),
         ];
         return $links;
     }
 
-    private function loadPsBilling() {
+    private function loadPsBilling()
+    {
         /**
          * PS Billing
          *
@@ -90,18 +92,17 @@ class AppController extends FrameworkBundleAdminController
          *
          * https://docs.cloud.prestashop.com/4-account-and-billing/#backend
          */
-        $billingFacade = $module->getService('ps_billings.facade');
+        $billingFacade = $this->module->getService('ps_billings.facade');
         Media::addJsDef($billingFacade->present([
-            'logo' => $module->getLocalPath() . 'logo.png',
+            'logo' => $this->module->getLocalPath() . 'logo.png',
             'tosLink' => 'https://www.knytify.com/terms.html',
             'privacyLink' => 'https://www.knytify.com/privacy.html',
             'emailSupport' => 'inquiry@knytify.com',
         ]));
-
-        return $billingFacade
     }
 
-    private function loadPsAccounts() {
+    private function loadPsAccounts()
+    {
         /**
          * PS Account
          *
@@ -117,12 +118,8 @@ class AppController extends FrameworkBundleAdminController
         $accountsService = $accountsFacade->getPsAccountsService();
         Media::addJsDef([
             'contextPsAccounts' => $accountsFacade->getPsAccountsPresenter()
-                ->present($module->name),
+                ->present($this->module->name),
         ]);
-
-        return [
-            "facade" => $accountsFacade,
-            "service" => $accountsService
-        ]
+        return $accountsService;
     }
 }

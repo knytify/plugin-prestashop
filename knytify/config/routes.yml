@@ -8,7 +8,7 @@ knytify_app:
         _legacy_controller: "KnytifyApp"
         _legacy_link: KnytifyApp
 
-knytify_app:
+knytify_stats:
     path: knytify/app/stats
     methods: [GET]
     defaults:

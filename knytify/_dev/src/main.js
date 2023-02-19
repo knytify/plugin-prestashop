@@ -26,4 +26,4 @@ app.use(VueApexCharts);
 app.component("apexchart", VueApexCharts);
 
 
-app.mount('#app')
+app.mount('#knytify-app')
