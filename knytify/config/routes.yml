@@ -1,14 +1,15 @@
 
-knytify_configuration:
-    path: knytify/configuration
+
+knytify_app:
+    path: knytify/app
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\ConfigurationController::indexAction'
-        _legacy_controller: "KnytifyConfiguration"
-        _legacy_link: KnytifyConfiguration
+        _controller: 'Knytify\Controller\Admin\AppController::indexAction'
+        _legacy_controller: "KnytifyApp"
+        _legacy_link: KnytifyApp
 
-knytify_stats:
-    path: knytify/stats
+knytify_app:
+    path: knytify/app/stats
     methods: [GET]
     defaults:
         _controller: 'Knytify\Controller\Admin\StatsController::indexAction'
@@ -23,51 +24,74 @@ knytify_error:
         _legacy_controller: "KnytifyError"
         _legacy_link: KnytifyError
 
-#################
-# Rest Routes
-#################
+#############################
+# REST account association
+#############################
+
+ps_knytify_user:
+    path: knytify/rest/user
+    methods: [GET]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\Rest\AccountController::user'
+
+ps_knytify_user_login:
+    path: knytify/rest/login
+    methods: [POST]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\Rest\AccountController::login'
+
+ps_knytify_user_setup:
+    path: knytify/rest/setup
+    methods: [POST]
+    defaults:
+        _controller: 'Knytify\Controller\Admin\Rest\AccountController::setup'
+
+
+#############################
+# REST plugin configuration
+#############################
 
 ps_knytify_configuration_set:
     path: knytify/rest/configuration
     methods: [POST]
     defaults:
-        _controller: 'Knytify\Controller\Admin\ConfigurationController::setConfig'
+        _controller: 'Knytify\Controller\Admin\Rest\ConfigurationController::setConfig'
 
 ps_knytify_configuration_get:
     path: knytify/rest/configuration
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\ConfigurationController::getConfig'
+        _controller: 'Knytify\Controller\Admin\Rest\ConfigurationController::getConfig'
 
+
+#############################
+# REST tag configuration
+#############################
 
 ps_knytify_configuration_script_set:
     path: knytify/rest/configuration-script
     methods: [POST]
     defaults:
-        _controller: 'Knytify\Controller\Admin\ConfigurationController::setScriptConfig'
+        _controller: 'Knytify\Controller\Admin\Rest\ConfigurationController::setScriptConfig'
 
 ps_knytify_configuration_script_get:
     path: knytify/rest/configuration-script
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\ConfigurationController::getScriptConfig'
+        _controller: 'Knytify\Controller\Admin\Rest\ConfigurationController::getScriptConfig'
 
-ps_knytify_stats:
-    path: knytify/rest/stats
-    methods: [GET]
-    defaults:
-        _controller: 'Knytify\Controller\Admin\StatsController::indexAction'
-        _legacy_controller: "KnytifyStats"
-        _legacy_link: KnytifyStats
+#############################
+# REST stats
+#############################
 
 ps_knytify_stats_recap:
     path: knytify/rest/stats-recap
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\StatsController::recap'
+        _controller: 'Knytify\Controller\Admin\Rest\StatsController::recap'
 
 ps_knytify_stats_advanced:
     path: knytify/rest/tats-advanced
     methods: [GET]
     defaults:
-        _controller: 'Knytify\Controller\Admin\StatsController::advanced'
+        _controller: 'Knytify\Controller\Admin\Rest\StatsController::advanced'

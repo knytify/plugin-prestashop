@@ -1,0 +1,26 @@
+<?php
+
+namespace Knytify\Controller\Admin\Rest;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class AccountController extends BaseController
+{
+
+    public function user(Request $request)
+    {
+        return new Response('OK', 200);
+    }
+
+    public function login(Request $request)
+    {
+        return new Response('OK', 200);
+    }
+
+
+    public function setup(Request $request)
+    {
+        return new Response('OK', 200);
+    }
+}

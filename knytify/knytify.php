@@ -2,7 +2,7 @@
 
 /**
  *  @author    Jean-François Kener
- *  @copyright 2022-2023 Knytify SARL
+ *  @copyright 2022-2023 Knytify SARLs
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -35,9 +35,6 @@ class Knytify extends Module
         $this->description = $this->l('Advanced traffic quality evaluation, fraud detection & prevention');
         $this->confirmUninstall = $this->l('Uninstalling this plugin will stop prevention against low quality traffic. Do you wish to proceed uninstalling it?');
         $this->ps_versions_compliancy = array('min' => '1.7.5', 'max' => '1.9.9');
-
-        $this->local_development = substr_compare(_PS_BASE_URL_, ".local", -strlen(".local")) === 0;
-
 
         if ($this->container === null) {
             $this->container = new \PrestaShop\ModuleLibServiceContainer\DependencyInjection\ServiceContainer(
@@ -92,7 +89,7 @@ class Knytify extends Module
         foreach (Language::getLanguages() as $lang) {
             $tab->name[$lang['id_lang']] = "Knytify Stats";
         }
-        $tab->id_parent = (int) Tab::getIdFromClassName('AdminStats');
+        $tab->id_parent = (int) Tab::getIdFromClassName('KnytifyStats');
         $tab->module = $this->name;
         return $tab->save();
     }
@@ -110,44 +107,9 @@ class Knytify extends Module
 
     public function getContent()
     {
-
-        /**
-         * Configuration errors (eg. https required)
-         */
-        $this->handleErrors();
-
-
         Tools::redirectAdmin(
-            $this->context->link->getAdminLink('KnytifyConfiguration')
+            $this->context->link->getAdminLink('KnytifyApp')
         );
-        // $api_key = Configuration::get('KNYTIFY_API_KEY');
-        // if (empty($api_key)) {
-        //     Tools::redirectAdmin(
-        //         $this->context->link->getAdminLink('KnytifyGettingStarted')
-        //     );
-        // } else {
-        //     Tools::redirectAdmin(
-        //         $this->context->link->getAdminLink('KnytifyConfiguration')
-        //     );
-        // }
-    }
-
-    private function handleErrors()
-    {
-        $error = null;
-
-        if (!Configuration::get('PS_SSL_ENABLED', false) && !$this->local_development) {
-            // The Knytify API blocks non-ssl requests.
-            $error = "ssl";
-        }
-
-        if (!empty($error)) {
-            // Combine both ways of passing args with getAdminLink
-            // https://devdocs.prestashop-project.org/1.7/modules/core-updates/1.7.5/
-            Tools::redirectAdmin(
-                $this->context->link->getAdminLink('KnytifyError', true, [], ['error' => $error]) . '&amp;error=' . $error
-            );
-        }
     }
 
     public function hookDisplayBackOfficeHeader($params)
@@ -179,7 +141,6 @@ class Knytify extends Module
     {
         if (Configuration::get('KNYTIFY_ENABLED')) {
 
-            // A single json-encoded dictionary is used to avoid multiple sql queries.
             $script_config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', '');
 
             return '

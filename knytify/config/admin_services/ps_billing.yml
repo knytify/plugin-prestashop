@@ -1,0 +1,25 @@
+services:
+
+  _defaults:
+    public: true
+
+  ps_billings.context_wrapper:
+    class: 'PrestaShopCorp\Billing\Wrappers\BillingContextWrapper'
+    arguments:
+      - '@ps_accounts.facade'
+      - '@knytify.context'
+      - true # if true you are in sandbox mode, if false or empty not in sandbox
+
+  ps_billings.facade:
+    class: 'PrestaShopCorp\Billing\Presenter\BillingPresenter'
+    arguments:
+      - '@ps_billings.context_wrapper'
+      - '@knytify.module'
+
+  # Remove this if you don't need BillingService
+  ps_billings.service:
+    class: PrestaShopCorp\Billing\Services\BillingService
+    public: true
+    arguments:
+      - '@ps_billings.context_wrapper'
+      - '@knytify.module'

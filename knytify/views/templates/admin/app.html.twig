@@ -5,13 +5,11 @@
 {% endblock %}
 
 {% block content %}
-
     <link href="{{urlAccountsCdn}}" rel=preload></script>
     <link href="{{chunkVendor}}" rel=preload as=script></script>
     <link href="{{pathApp}}" rel=preload as=script>
 
-    <prestashop-accounts></prestashop-accounts>
-    <div id="app"></div>
+    <div id="knytify-app"></div>
 {% endblock %}
 
 
@@ -27,14 +25,6 @@
     <script src="{{pathApp}}"></script>
 
     <script type="text/javascript">
-        window?.psaccountsVue?.init();
 
-        if(window.psaccountsVue.isOnboardingCompleted() != true)
-        {
-            const el = document.getElementById("module-config")
-            if(el && el.style) {
-                el.style.opacity = "0.5";
-            }
-        }
     </script>
 {% endblock %}

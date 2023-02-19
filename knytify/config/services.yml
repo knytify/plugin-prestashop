@@ -1,3 +1,3 @@
 
 imports:
-  - { resource: ./admin/services.yml }
+  - { resource: ./admin_services/services.yml }

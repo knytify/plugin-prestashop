@@ -1,0 +1,30 @@
+services:
+
+  _defaults:
+    public: true
+
+  #   # The name of the service must match the full namespace class
+  #   Knytify\Controller\GettingStartedController:
+  #     class: Knytify\Controller\GettingStartedController
+  #     arguments:
+  #       - '@doctrine.cache.provider'
+
+  Knytify\Service\Admin\KnytifyClient:
+    class: Knytify\Service\Admin\KnytifyClient
+      # arguments: ['@doctrine.orm.entity_manager']
+      # tags: [form.type]
+
+  # Deps. for PS
+  knytify.module:
+    class: knytify
+    factory: ['Module', 'getInstanceByName']
+    arguments:
+      - 'knytify'
+
+  knytify.context:
+    class: Context
+    factory: ['Context', 'getContext']
+
+imports:
+  - { resource: ./ps_accounts.yml }
+  - { resource: ./ps_billing.yml }

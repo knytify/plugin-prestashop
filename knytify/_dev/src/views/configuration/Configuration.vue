@@ -33,7 +33,6 @@ import Subscription from "./Subscription.vue";
 
 export default {
   name: "App",
-  created() {},
   data: function () {
     console.log("PS Account", window.contextPsAccounts);
     console.log("PS Billing", window.psBillingContext.context);

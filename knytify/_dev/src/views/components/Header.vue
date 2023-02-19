@@ -10,7 +10,7 @@
       <span style="margin-left: auto">
         <a
           class="ml-2"
-          v-if="controller != 'KnytifyConfiguration'"
+          v-if="controller !== 'KnytifyConfiguration' && controller !== 'KnytifyAssociation' "
           :href="links.configuration"
           ><v-btn>Go to Configuration</v-btn></a
         >
