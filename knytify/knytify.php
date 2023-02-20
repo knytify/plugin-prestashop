@@ -89,7 +89,7 @@ class Knytify extends Module
         foreach (Language::getLanguages() as $lang) {
             $tab->name[$lang['id_lang']] = "Knytify Stats";
         }
-        $tab->id_parent = (int) Tab::getIdFromClassName('KnytifyStats');
+        $tab->id_parent = (int) Tab::getIdFromClassName('AdminStats'); // Prestashop Parent tab.
         $tab->module = $this->name;
         return $tab->save();
     }

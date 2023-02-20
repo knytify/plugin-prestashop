@@ -63,6 +63,11 @@ class AppController extends FrameworkBundleAdminController
             'account_setup' => $this->router->generate('ps_knytify_user_setup'),
 
             /**
+             * Link for the configuration page. (=app default page)
+             */
+            'knytify_configuration' => $this->router->generate('knytify_app'),
+
+            /**
              * Routes to configure the plugin
              */
             'configuration_set' => $this->router->generate('ps_knytify_configuration_set'),
@@ -94,6 +99,7 @@ class AppController extends FrameworkBundleAdminController
          * https://docs.cloud.prestashop.com/4-account-and-billing/#backend
          */
         $billingFacade = $this->module->getService('ps_billings.facade');
+
         Media::addJsDef($billingFacade->present([
             'logo' => $this->module->getLocalPath() . 'logo.png',
             'tosLink' => 'https://www.knytify.com/terms.html',

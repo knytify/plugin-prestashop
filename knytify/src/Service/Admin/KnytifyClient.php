@@ -18,7 +18,7 @@ class KnytifyClient extends AbstractType
     protected $response = null; // mixed
     protected ?string $error = null;
 
-    public function setupPassword(string $email, string $password, string $password_check, ?string $domain = null): bool
+    public function setupPassword(string $email, string $password): bool
     {
         /**
          * On subscription, the account is automatically created, but we need still the user to setup a password to
@@ -31,20 +31,10 @@ class KnytifyClient extends AbstractType
             return false;
         }
 
-        if ($password != $password_check) {
-            $this->error = "Passwords must match.";
-            return false;
-        }
-
         $body = [
             "email" => $email,
             "password" => $password,
-            "source" => "prestashop"
         ];
-
-        if (!empty($domain)) {
-            $body["authorize_domain"] = $domain;
-        }
 
         $success = $this->query('/me/', $body);
 
@@ -55,7 +45,7 @@ class KnytifyClient extends AbstractType
         return $success;
     }
 
-    public function login(string $email, string $password, ?string $domain = null): bool
+    public function login(string $email, string $password, string $domain): bool
     {
         /**
          * Log-in if the account already exists, and associate the api-key.
@@ -68,12 +58,9 @@ class KnytifyClient extends AbstractType
 
         $body = [
             "username" => $email,
-            "password" => $password
+            "password" => $password,
+            "authorize_domain" => $domain,
         ];
-
-        if (!empty($domain)) {
-            $body["authorize_domain"] = $domain;
-        }
 
         $success = $this->query('/auth/login-for-plugin/', $body);
 

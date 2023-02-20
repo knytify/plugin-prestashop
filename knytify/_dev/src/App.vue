@@ -18,7 +18,19 @@
       />
 
       <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
-      <AccountAssociation :email="psBillingContext?.context?.user?.email"/>
+      <AccountAssociation
+        :email="psBillingContext?.context?.user?.email"
+        v-if="
+          this.getAccountsVue().isOnboardingCompleted() &&
+          psBillingContext?.context?.user?.email
+        "
+      />
+    </div>
+
+    <div v-else-if="page == 'wrong_api_key'">
+      <p>It seems like your API key is not valid any more.</p>
+      <p>Please, update it</p>
+      <p><v-btn @click.prevent="page = 'setup'">Update configuration</v-btn></p>
     </div>
 
     <KnytifyConfiguration v-else-if="page == 'configuration'" />
@@ -38,7 +50,11 @@ import KnytifyStats from "./views/stats/Stats.vue";
 export default {
   name: "App",
   created() {
-    this.$store.dispatch("knytify_account/getUser");
+    this.$store.dispatch("knytify_account/getUser").catch((err) => {
+      if (err.response.status == 401 && this.page != "setup") {
+        this.page = "wrong_api_key";
+      }
+    });
   },
   mounted() {
     this.getAccountsVue().init();
@@ -55,7 +71,7 @@ export default {
   },
   data: function () {
     return {
-      page: 'setup',
+      page: "setup",
       // page: window.knytify.page,
       psBillingContext: window.psBillingContext,
       psAccount: { ...window.contextPsAccounts },

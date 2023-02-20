@@ -2,38 +2,28 @@
 
 namespace Knytify\Controller\Admin\Rest;
 
-use Symfony\Component\HttpFoundation\Request;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
+use Knytify\Service\Admin\KnytifyClient;
+
 use Configuration;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Module;
 
 
 class BaseController extends FrameworkBundleAdminController
 {
-    protected ?string $api_key = null;
+    protected $knytify_module = null;
+    protected ?KnytifyClient $knytify_client = null;
 
     public function __construct()
     {
-        $this->api_key = Configuration::get('KNYTIFY_API_KEY', null);
-    }
+        $this->knytify_module = Module::getInstanceByName('knytify');
+        $this->knytify_client = $this->knytify_module->get('Knytify\Service\Admin\KnytifyClient');
 
-    protected function knytify_request(string $method, Request $request)
-    {
-        if (empty($this->api_key)) {
-            $this->api_key = "8-1OjTyU-KxUoYP9ZBWJn7P8MSfT7QAEDHfhl5DTa";
-            // return new Response('missing_api_key', 401);
+        $api_key = Configuration::get('KNYTIFY_API_KEY', null);
+
+        if (!empty($api_key)) {
+            $this->knytify_client->setApiKey($api_key);
         }
 
-        $service = $this->get('Knytify\Service\Admin\KnytifyClient');
-        $service->setApiKey($this->api_key);
-
-        $success = $service->{$method}($request);
-
-        if ($success) {
-            return new JsonResponse($service->getResponse());
-        } else {
-            return new Response($service->getError(), $service->getStatusCode());
-        }
     }
 }

@@ -162,5 +162,8 @@
     "business_street_address": "Street",
     "business_city": "City",
     "business_zipcode": "ZIP code",
-    "email": "E-mail"
+    "email": "E-mail",
+
+    "invalid_api_key": "The api-key does not belong to any registered e-mail.",
+    "email_mismatch": "The e-mail of this account does not match the e-mail of the subscription."
 }
