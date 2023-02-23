@@ -29,6 +29,11 @@ import {
 import { Vue } from "vue";
 
 export default {
+  mounted() {
+    (
+      window.psaccountsVue ?? require("prestashop_accounts_vue_components")
+    ).init();
+  },
   data() {
     return {
       billingContext: { ...window.psBillingContext.context },

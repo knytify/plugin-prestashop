@@ -10,15 +10,15 @@
       <!-- Step 2: Subscription. On the webhook, knytify will create an account if it does not exist. -->
       <Subscription
         class="mt-4"
-        v-if="this.getAccountsVue().isOnboardingCompleted()"
+        v-if="getAccountsVue().isOnboardingCompleted()"
       />
 
       <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
       <AccountAssociation
         :email="psBillingContext?.context?.user?.email"
         v-if="
-          this.getAccountsVue().isOnboardingCompleted() &&
-          !psBillingContext?.context?.user?.email
+          getAccountsVue().isOnboardingCompleted() &&
+          psBillingContext?.context?.user?.email
         "
       />
     </div>
@@ -54,12 +54,18 @@ export default {
         } else if (err.response.status == 400) {
           // The user has no PS account associated/subscription anymore.
           this.page = "setup";
+          this.$nextTick().then(() => {
+            // Next tick = After DOM is rendered
+            this.getAccountsVue().init();
+          });
         }
       }
     });
   },
   mounted() {
-    this.getAccountsVue().init();
+    if (this.page == "setup") {
+      this.getAccountsVue().init();
+    }
   },
   methods: {
     getAccountsVue() {
