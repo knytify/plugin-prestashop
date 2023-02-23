@@ -1,7 +1,8 @@
 export default {
     SET_STATS_RECAP(state, { request, response }) {
-        state.init_recap = true
+        console.log("SET_STATS_RECAP")
         state.stats_recap = response
+        state.init_recap = true
     },
     RESET_STATS_RECAP(state, { request }) {
         state.init_recap = false;

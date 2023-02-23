@@ -59,18 +59,12 @@ export default {
       stats: (state) => state.stats.stats_recap,
     }),
     availableData() {
-      return true;
-      // const ts = this.stats[this.interval].last31.y;
-      // const key = Object.keys(ts)[0];
-      // if (ts[key].length == 0) {
-      //   return false;
-      // }
-      // for (var i = 0; i < ts[key].length; i++) {
-      //   if (ts[key][i] != 0) {
-      //     return true;
-      //   }
-      // }
-      // return false;
+      return (
+        this.stats.fraud_timeline.y.num_sessions.reduce(
+          (partialSum, a) => partialSum + a,
+          0
+        ) > 0
+      );
     },
     getData() {
       let stats = this.stats.fraud_timeline;
@@ -82,7 +76,7 @@ export default {
           timeseries.push({
             name: this.$t(ts_name),
             data: ts,
-            color: CHART_COLORS_BY_NAME[ts_name]
+            color: CHART_COLORS_BY_NAME[ts_name],
           });
         });
       return timeseries;

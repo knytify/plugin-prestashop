@@ -18,13 +18,7 @@
       />
 
       <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
-      <AccountAssociation
-        :email="psBillingContext?.context?.user?.email"
-        v-if="
-          this.getAccountsVue().isOnboardingCompleted() &&
-          psBillingContext?.context?.user?.email
-        "
-      />
+      <AccountAssociation :email="psBillingContext?.context?.user?.email" />
     </div>
 
     <div v-else-if="page == 'wrong_api_key'">
@@ -71,8 +65,7 @@ export default {
   },
   data: function () {
     return {
-      page: "setup",
-      // page: window.knytify.page,
+      page: window.knytify.page,
       psBillingContext: window.psBillingContext,
       psAccount: { ...window.contextPsAccounts },
       controller: window.help_class_name, // Prestashop defined

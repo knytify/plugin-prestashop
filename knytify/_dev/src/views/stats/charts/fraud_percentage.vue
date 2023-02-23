@@ -53,7 +53,7 @@ export default {
   },
   computed: {
     ...mapState({
-      init: state => state.stats.init_recap,
+      init: (state) => state.stats.init_recap,
       stats: (state) => state.stats.stats_recap,
     }),
     availableData() {
