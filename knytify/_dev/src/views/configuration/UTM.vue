@@ -57,8 +57,9 @@
         </v-container>
       </v-card>
     </div>
-    <div v-else>
+    <div v-else class="d-flex justify-center">
       <v-progress-circular
+        style="margin-top: 100px"
         :size="70"
         :width="7"
         color="blue"

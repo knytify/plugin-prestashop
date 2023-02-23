@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-height: 150px">
     <div class="mb-4">
       <prestashop-accounts></prestashop-accounts>
     </div>
