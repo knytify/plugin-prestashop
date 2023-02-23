@@ -5,20 +5,22 @@
     <!-- Once the account association / subscription are done, we will show these as a configuration tab instead -->
     <div v-if="page == 'setup'">
       <!-- Step 1: Prestashop account association -->
-      <prestashop-accounts
-        v-if="!this.getAccountsVue().isOnboardingCompleted()"
-      ></prestashop-accounts>
+      <prestashop-accounts></prestashop-accounts>
 
       <!-- Step 2: Subscription. On the webhook, knytify will create an account if it does not exist. -->
       <Subscription
+        class="mt-4"
+        v-if="this.getAccountsVue().isOnboardingCompleted()"
+      />
+
+      <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
+      <AccountAssociation
+        :email="psBillingContext?.context?.user?.email"
         v-if="
           this.getAccountsVue().isOnboardingCompleted() &&
           !psBillingContext?.context?.user?.email
         "
       />
-
-      <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
-      <AccountAssociation :email="psBillingContext?.context?.user?.email" />
     </div>
 
     <div v-else-if="page == 'wrong_api_key'">
@@ -45,8 +47,14 @@ export default {
   name: "App",
   created() {
     this.$store.dispatch("knytify_account/getUser").catch((err) => {
-      if (err.response.status == 401 && this.page != "setup") {
-        this.page = "wrong_api_key";
+      if (this.page != "setup" && this.page != "wrong_api_key") {
+        if (err.response.status == 401) {
+          // The api key is not valid
+          this.page = "wrong_api_key";
+        } else if (err.response.status == 400) {
+          // The user has no PS account associated/subscription anymore.
+          this.page = "setup";
+        }
       }
     });
   },

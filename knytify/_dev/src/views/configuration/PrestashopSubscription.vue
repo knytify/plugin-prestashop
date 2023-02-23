@@ -1,17 +1,23 @@
 <template>
   <div>
+    <div class="mb-4">
+      <prestashop-accounts></prestashop-accounts>
+    </div>
     <PsBillingCustomer
       ref="psBillingCustomerRef"
       :context="billingContext"
       :onOpenModal="openBillingModal"
       :hideInvoiceList="true"
     />
-    <PsBillingModal
-      v-if="modalType !== ''"
-      :context="billingContext"
-      :type="modalType"
-      :onCloseModal="closeBillingModal"
-    />
+    <teleport to="body">
+      <!-- Regardless of the z-index, if we leave the modal here, it will be partially hidden. -->
+      <PsBillingModal
+        v-if="modalType !== ''"
+        :context="billingContext"
+        :type="modalType"
+        :onCloseModal="closeBillingModal"
+      />
+    </teleport>
   </div>
 </template>
 

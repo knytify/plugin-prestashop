@@ -11,15 +11,13 @@
           </v-tabs>
           <General v-if="tab == 'general'" />
           <UTM v-else-if="tab == 'utm'" />
-          <Subscription
-            v-if="tab == 'subscription'"
-          />
+          <Subscription v-if="tab == 'subscription'" />
         </v-card>
       </div>
 
       <div v-else>
         <v-card>
-        <Subscription />
+          <Subscription />
         </v-card>
       </div>
     </div>
@@ -36,8 +34,8 @@ import Subscription from "./PrestashopSubscription.vue";
 export default {
   name: "App",
   data: function () {
-    console.log("PS Account", window.contextPsAccounts);
-    console.log("PS Billing", window.psBillingContext.context);
+    // console.log("PS Account", window.contextPsAccounts);
+    // console.log("PS Billing", window.psBillingContext.context);
     return {
       tab: "general",
       psAccount: { ...window.contextPsAccounts },

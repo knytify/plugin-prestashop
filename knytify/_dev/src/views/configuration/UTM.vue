@@ -57,7 +57,14 @@
         </v-container>
       </v-card>
     </div>
-    <div v-else>Loading...</div>
+    <div v-else>
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="blue"
+        indeterminate
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 
@@ -131,9 +138,10 @@ export default {
   },
   methods: {
     reset() {
-      let configuration = this.configuration_script && this.configuration_script.utm
-        ? JSON.parse(JSON.stringify(this.configuration_script))
-        : { utm: {} };
+      let configuration =
+        this.configuration_script && this.configuration_script.utm
+          ? JSON.parse(JSON.stringify(this.configuration_script))
+          : { utm: {} };
       console.log(configuration, "_-");
       this.form = configuration;
     },

@@ -28,7 +28,14 @@
         </v-container>
       </v-card>
     </div>
-    <div v-else>Loading...</div>
+    <div v-else>
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        color="blue"
+        indeterminate
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 

@@ -83,6 +83,8 @@ class AppController extends FrameworkBundleAdminController
              * Link for the stats page.
              */
             'stats' => $this->router->generate('knytify_stats'),
+            'stats_recap' => $this->router->generate('ps_knytify_stats_recap'),
+            'stats_advanced' => $this->router->generate('ps_knytify_stats_advanced'),
         ];
         return $links;
     }
