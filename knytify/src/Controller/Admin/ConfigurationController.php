@@ -78,9 +78,9 @@ class ConfigurationController extends FrameworkBundleAdminController
         $params = [
             // "knytify" is passed to the window, to be used on the Vue app.
             'knytify' => [
-                "base_url" => rtrim(Context::getContext()->shop->getBaseURL(true), "/"), // _PS_BASE_URL_ fails to present https:// sometimes.
+                'base_url' => rtrim(Context::getContext()->shop->getBaseURL(true), '/'), // _PS_BASE_URL_ fails to present https:// sometimes.
                 // Another way: see getShopUrl in ps_accounts module
-                "links" =>  [
+                'links' =>  [
                     'configuration_set' => $router->generate('ps_knytify_configuration_set'),
                     'configuration_get' => $router->generate('ps_knytify_configuration_get'),
                     'configuration_script_set' => $router->generate('ps_knytify_configuration_script_set'),
@@ -90,8 +90,8 @@ class ConfigurationController extends FrameworkBundleAdminController
             ],
 
             // Vue app params
-            'pathApp' => $module->getPathUri() . "views/js/vue/js/app.js",
-            'chunkVendor' => $module->getPathUri() . "views/js/vue/js/chunk-vendors.js",
+            'pathApp' => $module->getPathUri() . 'views/js/vue/js/app.js',
+            'chunkVendor' => $module->getPathUri() . 'views/js/vue/js/chunk-vendors.js',
 
             // PS Accounts
             'urlAccountsCdn' => $accountsService->getAccountsCdn(),
@@ -105,11 +105,11 @@ class ConfigurationController extends FrameworkBundleAdminController
 
     public function getConfig(Request $request)
     {
-        /**
+        /*
          * Gets the general plugin configuration
          */
         return new JsonResponse([
-            "enabled" => Configuration::get('KNYTIFY_ENABLED', false)
+            'enabled' => Configuration::get('KNYTIFY_ENABLED', false)
         ]);
     }
 
@@ -121,7 +121,7 @@ class ConfigurationController extends FrameworkBundleAdminController
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['enabled'])) {
-            $enabled = !empty($data['enabled']) ? "1" : "0";
+            $enabled = !empty($data['enabled']) ? '1' : '0';
         } else {
             $enabled = null;
         }
@@ -140,6 +140,7 @@ class ConfigurationController extends FrameworkBundleAdminController
          */
         $config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', null);
         $config = empty($config) ? [] : json_decode($config, true);
+
         return new JsonResponse($config);
     }
 
@@ -150,6 +151,7 @@ class ConfigurationController extends FrameworkBundleAdminController
          */
         $data = $request->getContent();
         Configuration::updateValue('KNYTIFY_SCRIPT_CONFIG', $data);
+
         return new Response('Updated', 201);
     }
 }

@@ -3,7 +3,7 @@
 // fr.php
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 
 // global $_MODULE;
 // $_MODULE = array();

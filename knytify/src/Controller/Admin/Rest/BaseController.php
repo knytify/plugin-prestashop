@@ -32,6 +32,7 @@ use Module;
 class BaseController extends FrameworkBundleAdminController
 {
     protected $knytify_module = null;
+
     protected ?KnytifyClient $knytify_client = null;
 
     public function __construct()

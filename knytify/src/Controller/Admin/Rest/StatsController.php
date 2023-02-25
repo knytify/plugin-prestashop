@@ -32,7 +32,7 @@ class StatsController extends BaseController
 {
     public function recap(Request $request)
     {
-        /**
+        /*
          * Rest proxy to knytify stats/graphs
          */
         return $this->proxy('getStatsRecap', $request);
@@ -40,7 +40,7 @@ class StatsController extends BaseController
 
     public function advanced(Request $request)
     {
-        /**
+        /*
          * Rest proxy to knytify stats/getStatsAdvanced
          */
         return $this->proxy('getStatsAdvanced', $request);
@@ -63,6 +63,7 @@ class StatsController extends BaseController
 
         if ($success) {
             $resp = $service->getResponse();
+
             return new JsonResponse($resp);
         } else {
             return new Response($service->getError(), 500);

@@ -32,11 +32,11 @@ class ConfigurationController extends BaseController
 {
     public function getConfig(Request $request)
     {
-        /**
+        /*
          * Gets the general plugin configuration
          */
         return new JsonResponse([
-            "enabled" => Configuration::get('KNYTIFY_ENABLED', false)
+            'enabled' => Configuration::get('KNYTIFY_ENABLED', false)
         ]);
     }
 
@@ -48,7 +48,7 @@ class ConfigurationController extends BaseController
         $data = json_decode($request->getContent(), true);
 
         if (isset($data['enabled'])) {
-            $enabled = !empty($data['enabled']) ? "1" : "0";
+            $enabled = !empty($data['enabled']) ? '1' : '0';
         } else {
             $enabled = null;
         }
@@ -67,6 +67,7 @@ class ConfigurationController extends BaseController
          */
         $config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', null);
         $config = empty($config) ? [] : json_decode($config, true);
+
         return new JsonResponse($config);
     }
 
@@ -77,6 +78,7 @@ class ConfigurationController extends BaseController
          */
         $data = $request->getContent();
         Configuration::updateValue('KNYTIFY_SCRIPT_CONFIG', $data);
+
         return new Response('Updated', 201);
     }
 }

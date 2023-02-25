@@ -11,11 +11,14 @@ class KnytifyClient extends AbstractType
     /**
      * A client for Knytify back-end API.
      */
+    public const BACK_URL = 'https://back.knytify.com';
 
-    public const BACK_URL = "https://back.knytify.com";
     protected ?string $api_key = null;
+
     protected ?int $status_code = null;
+
     protected $response = null; // mixed
+
     protected ?string $error = null;
 
     public function setupPassword(string $email, string $password): bool
@@ -24,16 +27,16 @@ class KnytifyClient extends AbstractType
          * On subscription, the account is automatically created, but we need still the user to setup a password to
          * complete the account creation and retrieve an api key, which will allow the plug-in to communicate with Knytify.
          */
-
         $validator = new KnytifyValidation();
         if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
+
             return false;
         }
 
         $body = [
-            "email" => $email,
-            "password" => $password,
+            'email' => $email,
+            'password' => $password,
         ];
 
         $success = $this->query('/me/', $body);
@@ -53,13 +56,14 @@ class KnytifyClient extends AbstractType
         $validator = new KnytifyValidation();
         if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
+
             return false;
         }
 
         $body = [
-            "username" => $email,
-            "password" => $password,
-            "authorize_domain" => $domain,
+            'username' => $email,
+            'password' => $password,
+            'authorize_domain' => $domain,
         ];
 
         $success = $this->query('/auth/login-for-plugin/', $body);
@@ -73,7 +77,7 @@ class KnytifyClient extends AbstractType
 
     public function getUser(): bool
     {
-        /**
+        /*
          * This route is useful to test wether the current Api-Key is valid.
          */
         return $this->query('/me/');
@@ -81,7 +85,7 @@ class KnytifyClient extends AbstractType
 
     public function getStatsRecap(Request $request): bool
     {
-        /**
+        /*
          * Retrieves data that is processed in Knytify backend,
          * to be displayed in the stats page.
          */
@@ -100,15 +104,15 @@ class KnytifyClient extends AbstractType
         }
 
         return $this->query('/stats/advanced/', [
-            "dimensions" => $request->query->get('dimensions'),
-            "interval" => $request->query->get('interval', 'daily'),
-            "from_date" => $from_date
+            'dimensions' => $request->query->get('dimensions'),
+            'interval' => $request->query->get('interval', 'daily'),
+            'from_date' => $from_date
         ], 'GET');
     }
 
     public function query($path, $payload = null, string $method = null): bool
     {
-        /**
+        /*
          * Generic HTTP request helper
          * It injects the Api Key
          */
@@ -161,16 +165,16 @@ class KnytifyClient extends AbstractType
                 $this->response = $curl_response;
             } else {
                 if ($this->status_code == 401) {
-                    $this->error = "invalid_api_key";
+                    $this->error = 'invalid_api_key';
                 } elseif (!empty($curl_response) && !empty($curl_response['detail'])) {
                     $this->error = is_array($curl_response['detail']) ? json_encode($curl_response['detail']) : $curl_response['detail'];
                 } else {
-                    $this->error = "CURL Error: " . curl_error($ch);
+                    $this->error = 'CURL Error: ' . curl_error($ch);
                 }
             }
         } catch (\Throwable $th) {
             $success = false;
-            $this->error = "Exception: " . $th->getMessage();
+            $this->error = 'Exception: ' . $th->getMessage();
             // throw $th;
         } finally {
             curl_close($ch);
