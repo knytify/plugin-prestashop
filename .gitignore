@@ -1,3 +1,5 @@
 *.zip
 composer.phar
 ps_payloads/
+vendor_dev/
+vendor/
