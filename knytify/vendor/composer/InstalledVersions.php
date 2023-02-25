@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'b73f5d3394bcbe414ceb6a2e64b41a0146447bf5',
+    'reference' => '38977b4a0a8196e2968bcc5299bba3b21b4168d0',
     'name' => 'prestashop/knytify',
   ),
   'versions' => 
@@ -68,7 +68,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'b73f5d3394bcbe414ceb6a2e64b41a0146447bf5',
+      'reference' => '38977b4a0a8196e2968bcc5299bba3b21b4168d0',
     ),
     'prestashop/module-lib-cache-directory-provider' => 
     array (
