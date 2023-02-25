@@ -4,10 +4,8 @@ namespace Knytify\Service\Validation;
 
 use Symfony\Component\Form\AbstractType;
 
-
 class KnytifyValidation extends AbstractType
 {
-
     private ?string $error = null;
 
     public function validateEmail(string $email): bool

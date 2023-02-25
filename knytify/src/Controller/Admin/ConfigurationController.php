@@ -21,7 +21,6 @@
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
 **/
 
-
 namespace Knytify\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -127,7 +126,7 @@ class ConfigurationController extends FrameworkBundleAdminController
             $enabled = null;
         }
 
-        if ($enabled !== NULL) {
+        if ($enabled !== null) {
             Configuration::updateValue('KNYTIFY_ENABLED', $enabled);
         }
 

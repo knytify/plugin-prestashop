@@ -21,9 +21,7 @@
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
 **/
 
-
 namespace Knytify\Controller\Admin;
-
 
 class StatsController extends AppController
 {

@@ -1,4 +1,5 @@
 <?php
+
 // en.php
 
 global $_MODULE;

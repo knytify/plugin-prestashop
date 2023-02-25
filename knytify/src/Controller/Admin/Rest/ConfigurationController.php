@@ -21,7 +21,6 @@
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
 **/
 
-
 namespace Knytify\Controller\Admin\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -29,10 +28,8 @@ use Configuration;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class ConfigurationController extends BaseController
 {
-
     public function getConfig(Request $request)
     {
         /**
@@ -56,7 +53,7 @@ class ConfigurationController extends BaseController
             $enabled = null;
         }
 
-        if ($enabled !== NULL) {
+        if ($enabled !== null) {
             Configuration::updateValue('KNYTIFY_ENABLED', $enabled);
         }
 

@@ -21,7 +21,6 @@
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
 **/
 
-
 namespace Knytify\Controller\Admin\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +54,6 @@ class AccountController extends BaseController
         }
 
         if ($this->knytify_client->getUser()) {
-
             $response = $this->knytify_client->getResponse();
 
             if (!empty($incoming_api_key)) {
@@ -122,7 +120,6 @@ class AccountController extends BaseController
 
     private function getSubscriptionEmail()
     {
-
         $subscription_customer = $this->ps_billing_service->getCurrentCustomer();
 
         if ($subscription_customer['httpStatus'] !== 200 || empty($subscription_customer["body"]["email"])) {

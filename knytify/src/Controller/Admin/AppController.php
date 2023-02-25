@@ -37,7 +37,6 @@ class AppController extends FrameworkBundleAdminController
 
     public function indexAction(Request $request)
     {
-
         $this->router = SymfonyContainer::getInstance()->get('router');
         $this->module = Module::getInstanceByName('knytify');
 
@@ -71,7 +70,6 @@ class AppController extends FrameworkBundleAdminController
 
     private function getLinks()
     {
-
         /**
          * The REST routes used by the app
          */

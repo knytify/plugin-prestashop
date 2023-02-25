@@ -156,7 +156,6 @@ class Knytify extends Module
     public function hookHeader()
     {
         if (Configuration::get('KNYTIFY_ENABLED')) {
-
             $script_config = Configuration::get('KNYTIFY_SCRIPT_CONFIG', '');
 
             return '

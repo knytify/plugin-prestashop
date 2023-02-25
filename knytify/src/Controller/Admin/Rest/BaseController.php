@@ -21,7 +21,6 @@
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
 **/
 
-
 namespace Knytify\Controller\Admin\Rest;
 
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
@@ -29,7 +28,6 @@ use Knytify\Service\Admin\KnytifyClient;
 
 use Configuration;
 use Module;
-
 
 class BaseController extends FrameworkBundleAdminController
 {
@@ -46,6 +44,5 @@ class BaseController extends FrameworkBundleAdminController
         if (!empty($api_key)) {
             $this->knytify_client->setApiKey($api_key);
         }
-
     }
 }

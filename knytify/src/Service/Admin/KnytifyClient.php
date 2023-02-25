@@ -12,7 +12,7 @@ class KnytifyClient extends AbstractType
      * A client for Knytify back-end API.
      */
 
-    const BACK_URL = "https://back.knytify.com";
+    public const BACK_URL = "https://back.knytify.com";
     protected ?string $api_key = null;
     protected ?int $status_code = null;
     protected $response = null; // mixed
@@ -128,9 +128,7 @@ class KnytifyClient extends AbstractType
         $url = KnytifyClient::BACK_URL . $path;
 
         try {
-
             if (!empty($payload)) {
-
                 if ($method == 'GET') {
                     $url .= '?' . http_build_query($payload);
                 } else {
@@ -164,7 +162,7 @@ class KnytifyClient extends AbstractType
             } else {
                 if ($this->status_code == 401) {
                     $this->error = "invalid_api_key";
-                } else if (!empty($curl_response) && !empty($curl_response['detail'])) {
+                } elseif (!empty($curl_response) && !empty($curl_response['detail'])) {
                     $this->error = is_array($curl_response['detail']) ? json_encode($curl_response['detail']) : $curl_response['detail'];
                 } else {
                     $this->error = "CURL Error: " . curl_error($ch);

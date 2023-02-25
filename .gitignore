@@ -2,4 +2,6 @@
 composer.phar
 ps_payloads/
 vendor_dev/
+vendor_prod/
 vendor/
+.php-cs-fixer.cache
