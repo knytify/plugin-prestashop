@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const licenseHeader = require("./license_header.js")
 // const fs = require('fs');
 // const packageJson = fs.readFileSync('./package.json')
 // const version = JSON.parse(packageJson).version || 0
@@ -6,14 +7,20 @@ const webpack = require("webpack");
 const { defineConfig } = require('@vue/cli-service')
 const path = require('path');
 
+
 module.exports = defineConfig({
   parallel: false,
 
   configureWebpack: {
     plugins: [
-        new webpack.ProvidePlugin({
-            cash: "cash-dom",
-        }),
+      new webpack.ProvidePlugin({
+        cash: "cash-dom",
+      }),
+      new webpack.BannerPlugin({
+        banner: licenseHeader,
+        raw: true,
+        entryOnly: true,
+      }),
     ],
     // output: {
     //     filename: `app-knytify.${version}.js`,

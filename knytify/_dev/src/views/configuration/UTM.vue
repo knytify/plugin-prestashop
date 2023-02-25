@@ -143,7 +143,6 @@ export default {
         this.configuration_script && this.configuration_script.utm
           ? JSON.parse(JSON.stringify(this.configuration_script))
           : { utm: {} };
-      console.log(configuration, "_-");
       this.form = configuration;
     },
     save() {

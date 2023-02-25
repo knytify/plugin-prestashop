@@ -1,5 +1,4 @@
-<?php
-/**
+const banner = `/**
 * Knytify Fraud Protection Plugin for Prestashop
 * Copyright (C) 2023  Knytify SARL-s
 *
@@ -19,13 +18,6 @@
 * @author       Knytify SARL <inquiry@knytify.com>
 * @copyright    2022-2023 Knytify SARL-s
 * @license      GPL-3.0-or-later (https://www.gnu.org/licenses/gpl-3.0.html)
-**/
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+**/`
 
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Cache-Control: post-check=0, pre-check=0', false);
-header('Pragma: no-cache');
-
-header('Location: ../');
-exit;
+module.exports = banner
