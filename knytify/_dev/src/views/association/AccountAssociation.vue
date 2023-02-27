@@ -10,7 +10,7 @@
         <v-icon icon="mdi-keyboard-return" />
       </span>
 
-      <div class="d-flex">
+      <div class="d-flex" v-if="!requesting">
         <div>
           <img
             class="logo mr-6"
@@ -63,7 +63,7 @@
           </div>
 
           <div v-else-if="step == 'setup_password'">
-            <v-form>
+            <v-form v-if="nextRetry === null">
               <v-row>
                 <v-col cols="12" sm="6">
                   <h2 class="title-3">Setup a password</h2>
@@ -71,9 +71,9 @@
               ><v-row>
                 <v-col cols="12" sm="6">
                   <v-text-field
-                    label="E-mail"
+                    :placeholder="email"
                     :value="email"
-                    required
+                    readonly
                     hide-details
                   />
                 </v-col> </v-row
@@ -81,26 +81,30 @@
                 <v-col cols="12" sm="6" class="d-flex align-center">
                   <v-text-field
                     clearable
+                    type="password"
                     label="Password"
                     v-model="password"
                     required
                     hide-details
                     class="mr-3"
                   />
-                <span>
-                  <v-icon icon="mdi-help-box"/>
-                  <v-tooltip activator="parent" location="right">
-                      At least one upper case English letter, (?=.*?[A-Z]) <br/>
-                      At least one lower case English letter, (?=.*?[a-z]) <br/>
-                      At least one digit, (?=.*?[0-9]) <br/>
-                      At least one special character, (?=.*?[#?!@$%^&*-]) <br/>
+                  <span>
+                    <v-icon icon="mdi-help-box" />
+                    <v-tooltip activator="parent" location="right">
+                      At least one upper case English letter, (?=.*?[A-Z])
+                      <br />
+                      At least one lower case English letter, (?=.*?[a-z])
+                      <br />
+                      At least one digit, (?=.*?[0-9]) <br />
+                      At least one special character, (?=.*?[#?!@$%^&*-]) <br />
                       Minimum eight in length .{8,} (with the anchors)
-                  </v-tooltip>
-                </span>
-                </v-col>
-                </v-row><v-row>
+                    </v-tooltip>
+                  </span>
+                </v-col> </v-row
+              ><v-row>
                 <v-col cols="12" sm="6">
                   <v-text-field
+                    type="password"
                     clearable
                     label="Password confirmation"
                     v-model="password_check"
@@ -118,6 +122,21 @@
                 </v-col>
               </v-row>
             </v-form>
+            <div v-else>
+              <div v-if="nextRetry >= 1">
+                We are still in the process of creating your account. <br />
+                Retrying in {{ nextRetry }} seconds
+              </div>
+
+              <div v-else class="d-flex justify-center">
+                <v-progress-circular
+                  :size="70"
+                  :width="7"
+                  color="blue"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </div>
           </div>
 
           <div v-else-if="step == 'login'">
@@ -141,6 +160,7 @@
                 <v-col cols="12" sm="6">
                   <v-text-field
                     clearable
+                    type="password"
                     label="Password"
                     v-model="password"
                     required
@@ -185,21 +205,32 @@
           </div>
 
           <div v-else-if="step == 'all_set'">
-              <v-row>
-                <v-col cols="12" sm="6">
-                  <h2 class="title-3">All set!</h2>
-                  <p>
-                    We are now analyzing your visitors.<br/>
-                    You can check the stats in the stats page, or configure your UTM parameters in the configuration page.
-                  </p>
-                  <p>
-                    <a :href="link_config"><v-btn class="mt-3">Go to configuration page</v-btn></a>
-                  </p>
-                </v-col>
-              </v-row>
+            <v-row>
+              <v-col cols="12" sm="6">
+                <h2 class="title-3">All set!</h2>
+                <p>
+                  We are now analyzing your visitors.<br />
+                  You can check the stats in the stats page, or configure your
+                  UTM parameters in the configuration page.
+                </p>
+                <p>
+                  <a :href="link_config"
+                    ><v-btn class="mt-3">Go to configuration page</v-btn></a
+                  >
+                </p>
+              </v-col>
+            </v-row>
           </div>
-
         </div>
+      </div>
+
+      <div v-else class="d-flex justify-center">
+        <v-progress-circular
+          :size="70"
+          :width="7"
+          color="blue"
+          indeterminate
+        ></v-progress-circular>
       </div>
     </v-container>
   </v-card>
@@ -207,8 +238,7 @@
 
 
 <script>
-
-import {formatHttpError} from "@/helper/format"
+import { formatHttpError } from "@/helper/format";
 
 export default {
   name: "App",
@@ -224,58 +254,69 @@ export default {
       password: "",
       password_check: "",
       link_config: window.knytify.links.knytify_configuration,
-    }
+      next_retry: null,
+      requesting: false,
+    };
   },
   methods: {
     doApiKey() {
-
-      if(this.api_key.length < 10) {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Error",
-            text: "Api key required",
-            level: "warning",
-          });
-          return;
+      if (this.api_key.length < 10) {
+        this.$store.dispatch("alerts/addAlert", {
+          title: "Error",
+          text: "Api key required",
+          level: "warning",
+        });
+        return;
       }
 
-      if(this.api_key)
-      this.$store
-        .dispatch("knytify_account/getUser", {
-          api_key: this.api_key.trim()
-        })
-        .then(() => {
-          this.step = 'all_set';
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Success",
-            text: "The API Key has been set.",
-            level: "success",
+      if (this.api_key) {
+        this.requesting = true;
+        this.$store
+          .dispatch("knytify_account/getUser", {
+            api_key: this.api_key.trim(),
+          })
+          .then(() => {
+            this.requesting = false;
+            this.step = "all_set";
+            this.$store.dispatch("alerts/addAlert", {
+              title: "Success",
+              text: "The API Key has been set.",
+              level: "success",
+            });
+          })
+          .catch((err) => {
+            this.requesting = false;
+            this.$store.dispatch("alerts/addAlert", {
+              title: "Error",
+              text: formatHttpError(
+                err,
+                "We could not associate this API Key",
+                this.$t
+              ),
+              level: "warning",
+            });
           });
-        })
-        .catch((err) => {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Error",
-            text: formatHttpError(err, "We could not associate this API Key", this.$t),
-            level: "warning",
-          });
-        });
+      }
     },
     doLogin() {
-
-      if(this.password < 10) {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Error",
-            text: "Password required",
-            level: "warning",
-          });
-          return;
+      if (this.password < 10) {
+        this.$store.dispatch("alerts/addAlert", {
+          title: "Error",
+          text: "Password required",
+          level: "warning",
+        });
+        return;
       }
+
+      this.requesting = true;
 
       this.$store
         .dispatch("knytify_account/login", {
-          password: this.password
+          password: this.password,
         })
         .then(() => {
-          this.step = 'all_set';
+          this.requesting = false;
+          this.step = "all_set";
           this.$store.dispatch("alerts/addAlert", {
             title: "Success",
             text: "The API Key has been set.",
@@ -283,6 +324,7 @@ export default {
           });
         })
         .catch((err) => {
+          this.requesting = false;
           this.$store.dispatch("alerts/addAlert", {
             title: "Error",
             text: formatHttpError(err, "We could not log-in", this.$t),
@@ -291,31 +333,39 @@ export default {
         });
     },
     doSetup() {
-
-      if(this.password !== this.password_check) {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Validation",
-            text: "Passwords do not match",
-            level: "warning",
-          });
-          return;
+      if (this.password !== this.password_check) {
+        this.$store.dispatch("alerts/addAlert", {
+          title: "Validation",
+          text: "Passwords do not match",
+          level: "warning",
+        });
+        return;
       }
 
-      if(this.password !== this.password_check) {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Validation",
-            text: "Passwords do not match",
-            level: "warning",
-          });
-          return;
+      this._try_setup();
+    },
+    _try_setup() {
+      if (this.step !== "setup_password") {
+        // Prevent timeout to trigger if the user changes the step.
+        this.nextRetry = null;
+        return;
       }
 
+      if (this.nextRetry && this.nextRetry > 0) {
+        this.nextRetry -= 1;
+        setTimeout(this._try_setup.bind(this), 1000);
+        return;
+      }
+
+      this.requesting = true;
       this.$store
         .dispatch("knytify_account/setup", {
-          password: this.password
+          password: this.password,
         })
         .then(() => {
-          this.step = 'all_set';
+          this.requesting = false;
+          this.step = "all_set";
+          this.next_retry = null;
           this.$store.dispatch("alerts/addAlert", {
             title: "Success",
             text: "The setup is complete. The API Key has been configured.",
@@ -323,15 +373,42 @@ export default {
           });
         })
         .catch((err) => {
-          this.$store.dispatch("alerts/addAlert", {
-            title: "Error",
-            text: "We could not complete the registration process.",
-            level: "warning",
-          });
+          this.requesting = false;
+          if (
+            err.response.status == 400 &&
+            err.response.data === "incorrect_credentials"
+          ) {
+            // The account creation triggered after the subscription webhook is still not completed.
+            this.$store.dispatch("alerts/addAlert", {
+              title: "Retrying soon",
+              text: "Waiting for account...",
+              level: "warning",
+            });
+            this.next_retry = 10;
+            setTimeout(this._try_setup.bind(this), 1000);
+            console.log("RETRYING IN 1s - FIRST");
+          } else {
+            console.log("NOT INC");
+            this.next_retry = null;
+            this.$store.dispatch("alerts/addAlert", {
+              title: "Error",
+              text: formatHttpError(err, "Error during setup", this.$t),
+              level: "warning",
+            });
+          }
         });
     },
   },
-  components: {},
+  computed: {
+    nextRetry: {
+      get() {
+        return this.next_retry;
+      },
+      set(v) {
+        this.next_retry = v;
+      },
+    },
+  },
 };
 </script>
 

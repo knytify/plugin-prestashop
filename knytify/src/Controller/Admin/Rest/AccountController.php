@@ -82,7 +82,7 @@ class AccountController extends BaseController
             return new Response('missing_subscription_email', 400);
         }
 
-        $input_data = json_decode($request->getContent(), true);
+        $input_data = json_decode($request->getContent());
 
         $result = $this->knytify_client->login($this->subscription_email, $input_data->password);
 
@@ -102,7 +102,7 @@ class AccountController extends BaseController
         /**
          * If setup succeeds, store the api key.
          */
-        $input_data = json_decode($request->getContent(), true);
+        $input_data = json_decode($request->getContent());
 
         if (empty($this->subscription_email)) {
             return new Response('missing_subscription_email', 400);

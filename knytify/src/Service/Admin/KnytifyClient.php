@@ -26,36 +26,28 @@ class KnytifyClient extends AbstractType
         /**
          * On subscription, the account is automatically created, but we need still the user to setup a password to
          * complete the account creation and retrieve an api key, which will allow the plug-in to communicate with Knytify.
+         * The route is the same as for login.
          */
         $validator = new KnytifyValidation();
         if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
+            $this->status_code = 400;
 
             return false;
         }
 
-        $body = [
-            'email' => $email,
-            'password' => $password,
-        ];
-
-        $success = $this->query('/me/', $body);
-
-        if ($success) {
-            $this->api_key = $this->response['api_key'];
-        }
-
-        return $success;
+        return $this->login($email, $password);
     }
 
-    public function login(string $email, string $password, string $domain): bool
+    public function login(string $email, string $password, ?string $domain = null): bool
     {
         /**
-         * Log-in if the account already exists, and associate the api-key.
+         * Log-in if the account already exists, and retrieve the api-key.
          */
         $validator = new KnytifyValidation();
         if (!$validator->validateEmail($email) || !$validator->validatePassword($password)) {
             $this->error = $validator->getError();
+            $this->status_code = 400;
 
             return false;
         }
