@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '38977b4a0a8196e2968bcc5299bba3b21b4168d0',
+    'reference' => 'f03e30dfba15e8008836a8fc9136fbecb43f696f',
     'name' => 'prestashop/knytify',
   ),
   'versions' => 
@@ -45,7 +45,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '38977b4a0a8196e2968bcc5299bba3b21b4168d0',
+      'reference' => 'f03e30dfba15e8008836a8fc9136fbecb43f696f',
     ),
     'prestashop/module-lib-cache-directory-provider' => 
     array (

@@ -72,7 +72,7 @@ class KnytifyClient extends AbstractType
         /*
          * This route is useful to test wether the current Api-Key is valid.
          */
-        return $this->query('/me/');
+        return $this->query('/users/me/');
     }
 
     public function getStatsRecap(Request $request): bool
@@ -81,7 +81,7 @@ class KnytifyClient extends AbstractType
          * Retrieves data that is processed in Knytify backend,
          * to be displayed in the stats page.
          */
-        return $this->query('/stats/recap/');
+        return $this->query('/users/me/stats/recap/');
     }
 
     public function getStatsAdvanced(Request $request): bool
