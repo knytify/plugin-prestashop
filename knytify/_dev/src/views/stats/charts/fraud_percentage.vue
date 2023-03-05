@@ -79,7 +79,7 @@ export default {
         num_sessions += stats.y.num_sessions[i];
         num_fraud += stats.y["fraud"][i];
       }
-      return [num_fraud, num_sessions];
+      return [Math.round(num_fraud), num_sessions];
     },
     labels_and_options() {
       let option = {
@@ -99,7 +99,7 @@ export default {
         },
         dataLabels: { enabled: false },
         expandOnClick: true,
-        stroke: { show: true, width: 25, colors: "#fff" },
+        stroke: { show: true, width: 2, colors: "#eee" },
         colors: ["#e2a03f", "#5c1ac3", "#e7515a"],
         legend: {
           show: false,
