@@ -1,6 +1,6 @@
 <template>
   <div style="min-height: 150px">
-    <div class="mb-4">
+    <div class="mb-4" v-if="accountAssotiation">
       <prestashop-accounts></prestashop-accounts>
     </div>
     <PsBillingCustomer
@@ -45,6 +45,12 @@ export default {
     return {
       emailSupport: window.psBillingContext.context.user.emailSupport,
     };
+  },
+  props: {
+    accountAssotiation: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     PsBillingCustomer: CustomerComponent.driver("vue3", Vue),
