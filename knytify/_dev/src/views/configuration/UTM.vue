@@ -13,7 +13,6 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="UTM source*"
-                placeholder="utm_source"
                 v-model="utmSource"
                 hide-details
               />
@@ -23,7 +22,6 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="UTM medium*"
-                placeholder="utm_medium"
                 v-model="utmMedium"
                 hide-details
               />
@@ -33,7 +31,6 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="UTM Campaign name"
-                placeholder="utm_name"
                 v-model="utmName"
                 hide-details
               />
@@ -43,7 +40,6 @@
             <v-col cols="12" sm="6">
               <v-text-field
                 label="UTM Campaign ID"
-                placeholder="utm_id"
                 v-model="utmId"
                 hide-details
               />

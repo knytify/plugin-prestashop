@@ -71,11 +71,23 @@
               ><v-row>
                 <v-col cols="12" sm="6">
                   <v-text-field
-                    :placeholder="email"
                     :value="email"
                     readonly
                     hide-details
+                    class="mr-3"
                   />
+
+                  <span>
+                    <v-icon icon="mdi-help-box" />
+                    <v-tooltip activator="parent" location="right">
+                      The e-mail used with your Prestashop association and
+                      <br />
+                      subscription, is the e-mail that will be used to create
+                      <br />
+                      your Knytify account.will be used to create your Knytify
+                      account.
+                    </v-tooltip>
+                  </span>
                 </v-col> </v-row
               ><v-row>
                 <v-col cols="12" sm="6" class="d-flex align-center">
@@ -154,7 +166,16 @@
                     :value="email"
                     required
                     hide-details
+                    class="mr-3"
                   />
+
+                  <span>
+                    <v-icon icon="mdi-help-box" />
+                    <v-tooltip activator="parent" location="right">
+                      Your Knytify account has to be the e-mail that you used to subscribe with Prestashop. <br/>
+                      If it is not, please, set up a password instead.
+                    </v-tooltip>
+                  </span>
                 </v-col> </v-row
               ><v-row>
                 <v-col cols="12" sm="6">
