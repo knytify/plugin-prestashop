@@ -69,9 +69,9 @@
                   <h2 class="title-3">Setup a password</h2>
                 </v-col> </v-row
               ><v-row>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm="6" class="d-flex align-center">
                   <v-text-field
-                    :value="email"
+                    :modelValue="email"
                     readonly
                     hide-details
                     class="mr-3"
@@ -84,8 +84,7 @@
                       <br />
                       subscription, is the e-mail that will be used to create
                       <br />
-                      your Knytify account.will be used to create your Knytify
-                      account.
+                      your Knytify account.
                     </v-tooltip>
                   </span>
                 </v-col> </v-row
@@ -160,19 +159,20 @@
                   </h2>
                 </v-col> </v-row
               ><v-row>
-                <v-col cols="12" sm="6">
+                <v-col cols="12" sm="6" class="d-flex align-center">
                   <v-text-field
                     label="E-mail"
-                    :value="email"
+                    :modelValue="email"
+                    readonly
                     required
                     hide-details
                     class="mr-3"
                   />
-
                   <span>
                     <v-icon icon="mdi-help-box" />
                     <v-tooltip activator="parent" location="right">
-                      Your Knytify account has to be the e-mail that you used to subscribe with Prestashop. <br/>
+                      Your Knytify account has to be the e-mail that you used to
+                      subscribe with Prestashop. <br />
                       If it is not, please, set up a password instead.
                     </v-tooltip>
                   </span>
@@ -215,7 +215,7 @@
               ><v-row class="mt-2">
                 <v-col cols="12" sm="6">
                   <v-btn type="submit" @click.prevent="doApiKey"
-                    >Confirm password
+                    >Confirm Api Key
                     <v-tooltip activator="parent">
                       You will be able to modify it later, through the app.
                     </v-tooltip></v-btn

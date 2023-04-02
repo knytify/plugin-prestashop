@@ -39,7 +39,7 @@
     <div v-else-if="page == 'wrong_api_key'">
       <v-card class="pa-3">
         <p>It seems like your API key is not valid any more.</p>
-        <p>Please, update it</p>
+        <p>Please, update it, by (re)assotiating your Knytify account.</p>
         <br />
         <p>
           <v-btn @click.prevent="page = 'setup'">Update configuration</v-btn>

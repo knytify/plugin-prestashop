@@ -1,40 +1,35 @@
 <template>
   <div>
     <Header controller="KnytifyStats" />
-    <div class="cards d-flex flex-wrap">
-      <div v-if="!err">
-        <v-card height="350" width="650">
-          <FraudCard />
-        </v-card>
-        <v-card height="350" width="350">
-          <FraudPercentage />
-        </v-card>
-        <v-card height="350" width="350">
-          <ComparisonChart dimension="fraud_by_source" />
-        </v-card>
-        <v-card height="350" width="350">
-          <ComparisonChart dimension="fraud_by_campaign" />
-        </v-card>
-        <v-card height="350" width="350">
-          <ComparisonChart dimension="fraud_by_device" />
-        </v-card>
-        <v-card height="350" width="350">
-          <ComparisonChart
-            dimension="fraud_by_reason"
-            :translate-labels="true"
-          />
-        </v-card>
-      </div>
-      <div v-else>
-        <v-card height="350" width="650">
-          An error happened while recovering the stats. <br />
-          If this happens, it can mean that your Knytify Api Key is not properly
-          linked to your shop, or that your Knytify account setup is not
-          complete. <br />
-          You can try to set up your account again. <br />
-          <v-btn :href="link_setup">Set Up Knytify account</v-btn>
-        </v-card>
-      </div>
+    <div v-if="!err" class="cards d-flex flex-wrap">
+      <v-card height="350" width="650">
+        <FraudCard />
+      </v-card>
+      <v-card height="350" width="350">
+        <FraudPercentage />
+      </v-card>
+      <v-card height="350" width="350">
+        <ComparisonChart dimension="fraud_by_source" />
+      </v-card>
+      <v-card height="350" width="350">
+        <ComparisonChart dimension="fraud_by_campaign" />
+      </v-card>
+      <v-card height="350" width="350">
+        <ComparisonChart dimension="fraud_by_device" />
+      </v-card>
+      <v-card height="350" width="350">
+        <ComparisonChart dimension="fraud_by_reason" :translate-labels="true" />
+      </v-card>
+    </div>
+    <div v-else>
+      <v-card height="350" width="650">
+        An error happened while recovering the stats. <br />
+        If this happens, it can mean that your Knytify Api Key is not properly
+        linked to your shop, or that your Knytify account setup is not complete.
+        <br />
+        You can try to set up your account again. <br />
+        <v-btn :href="link_setup">Set Up Knytify account</v-btn>
+      </v-card>
     </div>
   </div>
 </template>

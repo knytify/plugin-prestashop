@@ -11,7 +11,7 @@
         <a
           class="ml-2"
           v-if="controller !== 'KnytifyConfiguration' && controller !== 'KnytifyAssociation' "
-          :href="links.configuration"
+          :href="links.knytify_configuration"
           ><v-btn>Go to Configuration</v-btn></a
         >
         <a class="ml-2" v-if="controller != 'KnytifyStats'" :href="links.stats"
