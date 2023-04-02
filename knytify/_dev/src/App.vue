@@ -31,7 +31,7 @@
         v-if="
           getAccountsVue().isOnboardingCompleted() &&
           psBillingContext?.context?.user?.email &&
-          psBillingContext?.context?.subscription?.isActive
+          active_ps_subscription
         "
       />
     </div>
@@ -39,7 +39,8 @@
     <div v-else-if="page == 'wrong_api_key'">
       <v-card class="pa-3">
         <p>It seems like your API key is not valid any more.</p>
-        <p>Please, update it</p> <br/>
+        <p>Please, update it</p>
+        <br />
         <p>
           <v-btn @click.prevent="page = 'setup'">Update configuration</v-btn>
         </p>
@@ -69,6 +70,7 @@ export default {
       psBillingContext: window.psBillingContext,
       psAccount: { ...window.contextPsAccounts },
       controller: window.help_class_name, // Prestashop defined
+      active_ps_subscription: window.knytify.active_ps_subscription,
     };
   },
   created() {
@@ -100,7 +102,7 @@ export default {
     if (this.page == "setup") {
       this.getAccountsVue().init();
     }
-    console.log(this.page)
+    console.log(this.page);
   },
   methods: {
     getAccountsVue() {
