@@ -123,6 +123,14 @@ class AccountController extends BaseController
 
     private function getSubscriptionEmail()
     {
+        // https://docs.cloud.prestashop.com/5-prestashop-billing/#edit-the-module-name-php-file
+
+        $subscription = $this->ps_billing_service->getCurrentSubscription();
+        if($subscription['httpStatus'] == 404) {
+            // Subscription is non existant, therefore no e-mail too
+            return null;
+        }
+
         $subscription_customer = $this->ps_billing_service->getCurrentCustomer();
 
         if ($subscription_customer['httpStatus'] !== 200 || empty($subscription_customer['body']['email'])) {

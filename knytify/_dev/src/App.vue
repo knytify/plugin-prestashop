@@ -17,36 +17,33 @@
       <!-- Step 1: Prestashop account association -->
       <prestashop-accounts></prestashop-accounts>
 
-      <div v-if="!psAccountsReady" class="d-flex justify-center">
-        <v-progress-circular
-          style="margin-top: 100px"
-          :size="70"
-          :width="7"
-          color="blue"
-          indeterminate
-        ></v-progress-circular>
-      </div>
-
       <!-- Step 2: Subscription. On the webhook, knytify will create an account if it does not exist. -->
       <Subscription
         class="mt-4"
+        :accountAssotiation="false"
         v-if="getAccountsVue().isOnboardingCompleted()"
       />
 
       <!-- Step 3: Knytify account association. We need to store the api key to communicate further. -->
       <AccountAssociation
+        class="mt-4"
         :email="psBillingContext?.context?.user?.email"
         v-if="
           getAccountsVue().isOnboardingCompleted() &&
-          psBillingContext?.context?.user?.email
+          psBillingContext?.context?.user?.email &&
+          psBillingContext?.context?.subscription?.isActive
         "
       />
     </div>
 
     <div v-else-if="page == 'wrong_api_key'">
-      <p>It seems like your API key is not valid any more.</p>
-      <p>Please, update it</p>
-      <p><v-btn @click.prevent="page = 'setup'">Update configuration</v-btn></p>
+      <v-card class="pa-3">
+        <p>It seems like your API key is not valid any more.</p>
+        <p>Please, update it</p> <br/>
+        <p>
+          <v-btn @click.prevent="page = 'setup'">Update configuration</v-btn>
+        </p>
+      </v-card>
     </div>
 
     <KnytifyConfiguration v-else-if="page == 'configuration'" />
@@ -69,21 +66,22 @@ export default {
     return {
       page: window.knytify.page,
       ready: false,
-      psAccountsReady: false,
       psBillingContext: window.psBillingContext,
       psAccount: { ...window.contextPsAccounts },
       controller: window.help_class_name, // Prestashop defined
     };
   },
   created() {
-    this.$store
-      .dispatch("knytify_account/getUser")
-      .then(() => {
-        this.ready = true;
-      })
-      .catch((err) => {
-        this.ready = true;
-        if (this.page != "setup" && this.page != "wrong_api_key") {
+    if (this.page == "setup" || this.page == "wrong_api_key") {
+      this.ready = true;
+    } else {
+      this.$store
+        .dispatch("knytify_account/getUser")
+        .then(() => {
+          this.ready = true;
+        })
+        .catch((err) => {
+          this.ready = true;
           if (err.response.status == 401) {
             // The api key is not valid
             this.page = "wrong_api_key";
@@ -93,17 +91,16 @@ export default {
             this.$nextTick().then(() => {
               // Next tick = After DOM is rendered
               this.getAccountsVue().init();
-              this.psAccountsReady = true;
             });
           }
-        }
-      });
+        });
+    }
   },
   mounted() {
     if (this.page == "setup") {
       this.getAccountsVue().init();
-      this.psAccountsReady = true;
     }
+    console.log(this.page)
   },
   methods: {
     getAccountsVue() {
